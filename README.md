@@ -1,4 +1,4 @@
-# dosparklesmobile
+# dosparkles
 
 A new Flutter project.
 

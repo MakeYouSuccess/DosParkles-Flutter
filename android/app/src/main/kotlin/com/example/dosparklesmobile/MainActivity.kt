@@ -1,4 +1,4 @@
-package com.example.dosparklesmobile
+package com.dosparkles.app
 
 import io.flutter.embedding.android.FlutterActivity
 
