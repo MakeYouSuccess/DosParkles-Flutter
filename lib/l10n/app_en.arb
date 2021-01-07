@@ -1,0 +1,9 @@
+{
+    "appname": "DoSparkles",
+    "helloWorld": "Hello World!",
+    "welcome": "Welcome",
+    "continuebtn": "Continue",
+    "@helloWorld": {
+      "description": "The conventional newborn programmer greeting"
+    }
+}
