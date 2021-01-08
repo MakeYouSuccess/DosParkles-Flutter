@@ -10,7 +10,8 @@ class Routes {
       'loginpage': LoginPage(),
       'storeselectionpage': StoreSelectionPage(),
       'storepage': StorePage(),
-      'productpage': ProductPage()
+      'productpage': ProductPage(),
+      'cartpage': CartPage()
     },
     visitor: (String path, Page<Object, dynamic> page) {
       if (page.isTypeof<GlobalBaseState>()) {
