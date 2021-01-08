@@ -9,22 +9,17 @@ import 'action.dart';
 import 'state.dart';
 
 Widget buildView(
-    LoginPageState state, Dispatch dispatch, ViewService viewService) {
+    StoreSelectionPageState state, Dispatch dispatch, ViewService viewService) {
   return Scaffold(
     resizeToAvoidBottomPadding: false,
     body: Stack(
       children: <Widget>[
         _BackGround(controller: state.animationController),
-        _LoginBody(
+        _MainBody(
           animationController: state.animationController,
-          submitAnimationController: state.submitAnimationController,
-          accountFocusNode: state.accountFocusNode,
-          pwdFocusNode: state.pwdFocusNode,
-          accountTextController: state.accountTextController,
-          passWordTextController: state.passWordTextController,
           dispatch: dispatch,
         ),
-        // _AppBar(),
+        _AppBar(),
       ],
     ),
   );
@@ -37,7 +32,6 @@ class _BackGround extends StatelessWidget {
   Widget build(BuildContext context) {
     Adapt.initContext(context);
 
-    
     return Column(children: [
       Expanded(child: SizedBox()),
     ]);
@@ -224,26 +218,12 @@ class _SubmitButton extends StatelessWidget {
   }
 }
 
-class _LoginBody extends StatelessWidget {
+class _MainBody extends StatelessWidget {
   final Dispatch dispatch;
   final AnimationController animationController;
-  final AnimationController submitAnimationController;
-  final TextEditingController phoneTextController;
-  final TextEditingController codeTextContraller;
-  final TextEditingController accountTextController;
-  final TextEditingController passWordTextController;
-  final FocusNode accountFocusNode;
-  final FocusNode pwdFocusNode;
-  const _LoginBody({
-    this.accountFocusNode,
-    this.accountTextController,
+  const _MainBody({
     this.animationController,
-    this.codeTextContraller,
     this.dispatch,
-    this.passWordTextController,
-    this.phoneTextController,
-    this.pwdFocusNode,
-    this.submitAnimationController,
   });
   @override
   Widget build(BuildContext context) {
@@ -276,31 +256,6 @@ class _LoginBody extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                AnimatedSwitcher(
-                    duration: Duration(milliseconds: 300),
-                    child:
-                        _EmailEntry(
-                      onSubmit: (s) =>
-                          dispatch(LoginPageActionCreator.onLoginClicked()),
-                      controller: animationController,
-                      accountFocusNode: accountFocusNode,
-                      pwdFocusNode: pwdFocusNode,
-                      accountTextController: accountTextController,
-                      passWordTextController: passWordTextController,
-                    )
-                    ),
-                SlideTransition(
-                    position: Tween(begin: Offset(0, 1), end: Offset.zero)
-                        .animate(submitCurve),
-                    child: FadeTransition(
-                      opacity: Tween(begin: 0.0, end: 1.0).animate(submitCurve),
-                      child: _SubmitButton(
-                        controller: submitAnimationController,
-                        onSubimt: () =>
-                            dispatch(LoginPageActionCreator.onLoginClicked()),
-                      ),
-                    )),
-                
               ],
             ),
           ),

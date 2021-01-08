@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dosparkles/globalbasestate/state.dart';
-// import 'package:dosparkles/models/country_phone_code.dart';
 import 'package:dosparkles/models/app_user.dart';
 
 class LoginPageState implements GlobalBaseState, Cloneable<LoginPageState> {

@@ -3,14 +3,12 @@ import 'package:dosparkles/globalbasestate/store.dart';
 import 'package:dosparkles/models/app_user.dart';
 
 import 'package:dosparkles/actions/api/graphql_client.dart';
-import 'package:dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
 // import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 
-import 'package:dosparkles/routes/routes.dart';
 import 'action.dart';
 import 'state.dart';
 import 'package:toast/toast.dart';
@@ -77,6 +75,8 @@ void _onAction(Action action, Context<LoginPageState> ctx) {}
 Future _onLoginClicked(Action action, Context<LoginPageState> ctx) async {
   final _result = await _emailSignIn(action, ctx);
 
+  if (_result == null) return;
+
   BaseGraphQLClient.instance.setToken(_result['jwt']);
 
   final result = await BaseGraphQLClient.instance.me();
@@ -95,9 +95,6 @@ Future _onLoginClicked(Action action, Context<LoginPageState> ctx) async {
 }
 
 void _goToMain(Context<LoginPageState> ctx) async {
-  print('_goToMain');
-  // Navigator.of(ctx.context).pushReplacementNamed('order_details_page');
-
   await FirebaseMessaging.instance.getToken().then((String token) async {
     if (token != null) {
       print("_goToMain Push Messaging token: $token");
@@ -109,17 +106,19 @@ void _goToMain(Context<LoginPageState> ctx) async {
     }
   });
 
-  Navigator.of(ctx.context).pushReplacement(PageRouteBuilder(
-      pageBuilder: (_, __, ___) {
-        return Routes.routes.buildPage('mainpage', {
-          'pages': List<Widget>.unmodifiable([
-            Routes.routes.buildPage('chatpage', null),
-            Routes.routes.buildPage('orderspage', null),
-            Routes.routes.buildPage('notificationspage', null),
-          ])
-        });
-      },
-      settings: RouteSettings(name: 'mainpage')));
+  Navigator.of(ctx.context).pushReplacementNamed('storeselectionpage');
+
+  // Navigator.of(ctx.context).pushReplacement(PageRouteBuilder(
+  //     pageBuilder: (_, __, ___) {
+  //       return Routes.routes.buildPage('mainpage', {
+  //         'pages': List<Widget>.unmodifiable([
+  //           Routes.routes.buildPage('chatpage', null),
+  //           Routes.routes.buildPage('orderspage', null),
+  //           Routes.routes.buildPage('notificationspage', null),
+  //         ])
+  //       });
+  //     },
+  //     settings: RouteSettings(name: 'mainpage')));
 }
 
 Future<Map<String, dynamic>> _emailSignIn(
@@ -130,9 +129,12 @@ Future<Map<String, dynamic>> _emailSignIn(
       final _email = ctx.state.accountTextController.text.trim();
       final result = await BaseGraphQLClient.instance
           .loginWithEmail(_email, ctx.state.passWordTextController.text);
-      printWrapped('loginResult: ' + result.data.toString());
-      printWrapped('hasException: ' + result.hasException.toString());
-      printWrapped('exception: ' + result.exception.toString());
+
+      if (result.hasException) {
+        Toast.show("Error occurred", ctx.context,
+            duration: 3, gravity: Toast.BOTTOM);
+        return null;
+      }
       return result.data['login'];
     } on Exception catch (e) {
       print(e);
