@@ -5,6 +5,11 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'action.dart';
 import 'state.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:dosparkles/actions/user_info_operate.dart';
+import 'package:dosparkles/actions/stores_info_operate.dart';
+
 Effect<StartPageState> buildEffect() {
   return combineEffects(<Object, Effect<StartPageState>>{
     StartPageAction.action: _onAction,
@@ -17,17 +22,25 @@ Effect<StartPageState> buildEffect() {
 
 void _onAction(Action action, Context<StartPageState> ctx) {}
 
+Future _loadData() async {
+  await UserInfoOperate.whenAppStart();
+  await StoresInfoOperate.whenAppStart();
+}
+
 void _onInit(Action action, Context<StartPageState> ctx) async {
   FirebaseMessaging.instance.requestPermission();
   FirebaseMessaging.instance.setAutoInitEnabled(true);
 
   ctx.state.pageController = PageController();
+
+  await _loadData();
+
   SharedPreferences.getInstance().then((_p) async {
     final _isFirst = _p.getBool('firstStart') ?? true;
-    if (!_isFirst)
+    if (!_isFirst) {
       await _pushToSignInPage(ctx.context);
-    else
-      ctx.dispatch(StartPageActionCreator.setIsFirst(_isFirst));
+    } else
+      ctx.dispatch(StartPageActionCreator.setIsFirst(false));
   });
 }
 
@@ -35,8 +48,7 @@ void _onDispose(Action action, Context<StartPageState> ctx) {
   ctx.state.pageController.dispose();
 }
 
-void _onBuild(Action action, Context<StartPageState> ctx) {
-}
+void _onBuild(Action action, Context<StartPageState> ctx) {}
 
 void _onStart(Action action, Context<StartPageState> ctx) async {
   SharedPreferences.getInstance().then((_p) {

@@ -14,20 +14,20 @@ class BaseGraphQLClient {
     );
 
   void setToken(String token) {
-    print('setToken');
     _service.setupClient(
         httpLink: AppConfig.instance.graphQLHttpLink,
         /*webSocketLink: null, */ token: token);
   }
 
   void removeToken() {
-    print('removeToken');
     _service.setupClient(
       httpLink: AppConfig.instance.graphQLHttpLink, /*webSocketLink: null*/
     );
   }
 
   Future<QueryResult> loginWithEmail(String email, String password) {
+    removeToken();
+    
     String _query = '''
     mutation {
       login(input: {
@@ -69,6 +69,53 @@ class BaseGraphQLClient {
             avatar {
               url
             }
+          }
+        }
+      }
+    ''';
+
+    return _service.query(_query);
+  }
+
+  Future<QueryResult> storesWithProductsList() {
+    String _query = '''
+    query {
+      stores {
+          name
+          address
+          phone
+          thumbnail {
+            url
+          }
+          products {
+            id
+            shineonId
+            thumbnail {
+              url
+            }
+            oldPrice
+            price
+            showOldPrice
+            engraveAvailable
+            properties
+            engraveOldPrice
+            engravePrice
+            showOldEngravePrice
+            defaultFinishMaterial
+            optionalFinishMaterial
+            optionalFinishMaterialPrice
+            optionalFinishMaterialEnabled
+            media {
+              url
+            }
+            deliveryInformation
+            name
+            deliveryInformation
+            name
+            weight
+            uploadsAvailable
+            sizeOptionsAvailable
+            isActive
           }
         }
       }

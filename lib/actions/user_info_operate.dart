@@ -1,52 +1,44 @@
 import 'package:dosparkles/globalbasestate/action.dart';
 import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/models/app_user.dart';
+import 'package:dosparkles/models/model_factory.dart';
+import 'package:dosparkles/models/models.dart';
+import 'package:dosparkles/utils/general.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import 'api/base_api.dart';
+import 'package:dosparkles/actions/api/graphql_client.dart';
 
 class UserInfoOperate {
-  static bool isPremium = false;
-  static String premiumExpireDate;
+  static Future whenLogin(String token) async {
+    BaseGraphQLClient.instance.setToken(token);
 
-  static Future whenLogin(AppUser user, String nickName) async {
-    final _baseApi = BaseApi.instance;
-    // _baseApi.updateUser(
-    //     user.uid, user.email, user.photoUrl, nickName, user.phoneNumber);
+    final meRequest = await BaseGraphQLClient.instance.me();
+    final user = ModelFactory.generate<AppUser>(meRequest.data['me']['user']);
+    GlobalStore.store.dispatch(GlobalActionCreator.setUser(user));
 
-    GlobalStore.store
-        .dispatch(GlobalActionCreator.setUser(AppUser(name: "test")));
+    printWrapped('user whenLogin: $user');
   }
 
   static Future<bool> whenLogout() async {
-    // final FirebaseAuth _auth = FirebaseAuth.instance;
-    // final FirebaseUser currentUser = await _auth.currentUser();
     SharedPreferences _preferences = await SharedPreferences.getInstance();
-    // if (currentUser != null) {
     try {
-      // _auth.signOut();
-      _preferences.remove('PaymentToken');
-      _preferences.remove('premiumData');
-      premiumExpireDate = null;
+      _preferences.remove('jwt');
+      _preferences.remove('userId');
+      BaseGraphQLClient.instance.removeToken();
       GlobalStore.store.dispatch(GlobalActionCreator.setUser(null));
     } on Exception catch (_) {
       return false;
     }
     return true;
-    // }
-    // return false;
   }
 
   static Future whenAppStart() async {
-    print("whenAppStart");
-    // var _user = await FirebaseAuth.instance.currentUser();
-    // if (_user != null) {
-    //   SharedPreferences _preferences = await SharedPreferences.getInstance();
-    //   UserPremiumData _premiumData;
-    //   String _data = _preferences.getString('premiumData');
-    //   if (_data != null) _premiumData = UserPremiumData(_data);
-    //   GlobalStore.store.dispatch(GlobalActionCreator.setUser(
-    //       AppUser(firebaseUser: _user, premium: _premiumData)));
-    // }
+    print("whenAppStart UserInfo");
+    SharedPreferences _preferences = await SharedPreferences.getInstance();
+
+    final savedToken = _preferences.getString('jwt') ?? '';
+    print('savedToken $savedToken');
+
+    if (savedToken.isNotEmpty) {
+      whenLogin(savedToken);
+    }
   }
 }

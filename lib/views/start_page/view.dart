@@ -21,9 +21,6 @@ Widget buildView(
   }
 
   return Scaffold(
-      // appBar: AppBar(
-      //       backgroundColor: HexColor("#182465"),
-      //       title: Text(AppLocalizations.of(context).welcome)),
     body: FutureBuilder(
         future: _checkContextInit(
           Stream<double>.periodic(Duration(milliseconds: 50),
@@ -67,11 +64,9 @@ class _FirstPage extends StatelessWidget {
     return Container(
         child: SafeArea(
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        _AppBar(),
+        // 
         SizedBox(height: Adapt.px(300)),
-        // Text(
-        //   AppLocalizations.of(context).welcome, 
-        //   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-        // ),
         SizedBox(height: Adapt.px(20)),
         Expanded(child: SizedBox()),
         GestureDetector(
@@ -95,5 +90,23 @@ class _FirstPage extends StatelessWidget {
         SizedBox(height: Adapt.px(20))
       ]),
     ));
+  }
+}
+
+class _AppBar extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Positioned(
+      top: 0.0,
+      left: 0.0,
+      right: 0.0,
+      child: AppBar(
+        brightness: Brightness.dark,
+        backgroundColor: HexColor('#01406F'),
+        elevation: 0.0,
+        iconTheme: IconThemeData(color: Colors.white),
+        title: Text(AppLocalizations.of(context).startPageTitle)
+      ),
+    );
   }
 }

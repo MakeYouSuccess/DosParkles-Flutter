@@ -18,13 +18,11 @@ class Routes {
         page.connectExtraStore<GlobalState>(GlobalStore.store,
             (Object pagestate, GlobalState appState) {
           final GlobalBaseState p = pagestate;
-          if (p.themeColor != appState.themeColor ||
-              p.locale != appState.locale ||
+          if (p.locale != appState.locale ||
               p.user != appState.user) {
             if (pagestate is Cloneable) {
               final Object copy = pagestate.clone();
               final GlobalBaseState newState = copy;
-              newState.themeColor = appState.themeColor;
               newState.locale = appState.locale;
               newState.user = appState.user;
               return newState;

@@ -5,6 +5,8 @@ import 'package:dosparkles/actions/adapt.dart';
 import 'package:dosparkles/style/themestyle.dart';
 import 'package:dosparkles/utils/colors.dart';
 
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -47,9 +49,10 @@ class _AppBar extends StatelessWidget {
       right: 0.0,
       child: AppBar(
         brightness: Brightness.dark,
-        backgroundColor: Colors.transparent,
+        backgroundColor: HexColor('#01406F'),
         elevation: 0.0,
         iconTheme: IconThemeData(color: Colors.white),
+        // title: Text(AppLocalizations.of(context).storePageTitle)
       ),
     );
   }

@@ -20,7 +20,6 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:dosparkles/routes/routes.dart';
 import 'actions/app_config.dart';
-import 'actions/user_info_operate.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// Define a top-level named handler which background/terminated messages will
@@ -100,10 +99,7 @@ class _AppState extends State<App> {
     if (Platform.isAndroid)
       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
 
-
     await AppConfig.instance.init(context);
-
-    await UserInfoOperate.whenAppStart();
   }
 
   @override
@@ -152,9 +148,10 @@ class _AppState extends State<App> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      localeResolutionCallback: (Locale locale, Iterable<Locale> supportedLocales) {
-         return locale;
-       },
+      localeResolutionCallback:
+          (Locale locale, Iterable<Locale> supportedLocales) {
+        return locale;
+      },
       localizationsDelegates: [
         AppLocalizations.delegate,
         GlobalMaterialLocalizations.delegate,
@@ -166,7 +163,7 @@ class _AppState extends State<App> {
       theme: _lightTheme,
       darkTheme: _darkTheme,
       supportedLocales: [
-      const Locale.fromSubtags(languageCode: 'en'),
+        const Locale.fromSubtags(languageCode: 'en'),
       ],
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),

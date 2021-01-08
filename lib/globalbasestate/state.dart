@@ -3,9 +3,6 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:dosparkles/models/app_user.dart';
 
 abstract class GlobalBaseState {
-  Color get themeColor;
-  set themeColor(Color color);
-
   Locale get locale;
   set locale(Locale locale);
 
@@ -15,8 +12,6 @@ abstract class GlobalBaseState {
 
 class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
   @override
-  Color themeColor;
-  @override
   Locale locale;
 
   @override
@@ -25,7 +20,6 @@ class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
   @override
   GlobalState clone() {
     return GlobalState()
-      ..themeColor = themeColor
       ..locale = locale
       ..user = user;
   }

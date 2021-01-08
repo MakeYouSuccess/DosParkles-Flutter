@@ -1,7 +1,3 @@
-import 'package:dosparkles/globalbasestate/action.dart';
-import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/models/app_user.dart';
-
 import 'package:dosparkles/actions/api/graphql_client.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
@@ -12,6 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'action.dart';
 import 'state.dart';
 import 'package:toast/toast.dart';
+import 'package:dosparkles/actions/user_info_operate.dart';
 
 Effect<LoginPageState> buildEffect() {
   return combineEffects(<Object, Effect<LoginPageState>>{
@@ -27,7 +24,6 @@ Effect<LoginPageState> buildEffect() {
 }
 
 void _onInit(Action action, Context<LoginPageState> ctx) async {
-  print('_onInit');
   ctx.state.accountFocusNode = FocusNode();
   ctx.state.pwdFocusNode = FocusNode();
   final Object ticker = ctx.stfState;
@@ -38,25 +34,14 @@ void _onInit(Action action, Context<LoginPageState> ctx) async {
   ctx.state.accountTextController = TextEditingController();
   ctx.state.passWordTextController = TextEditingController();
 
-  SharedPreferences.getInstance().then((_p) async {
-    final savedToken = _p.getString('jwt') ?? '';
-    print('savedToken: $savedToken');
-    if (savedToken.isNotEmpty) {
-      BaseGraphQLClient.instance.setToken(savedToken);
-
-      print('me');
-      final result = await BaseGraphQLClient.instance.me();
-      GlobalStore.store.dispatch(GlobalActionCreator.setUser(AppUser(
-          name: result.data['me']['user']['name'],
-          email: result.data['me']['user']['email'])));
-
-      _goToMain(ctx);
-    }
-  });
+  print('user Login: ${ctx.state.user}');
+  if (ctx.state.user != null) {
+    print('user not null');
+    _goToMain(ctx);
+  }
 }
 
 void _onBuild(Action action, Context<LoginPageState> ctx) {
-  print('_onBuild');
   Future.delayed(Duration(milliseconds: 150),
       () => ctx.state.animationController.forward());
 }
@@ -77,17 +62,13 @@ Future _onLoginClicked(Action action, Context<LoginPageState> ctx) async {
 
   if (_result == null) return;
 
-  BaseGraphQLClient.instance.setToken(_result['jwt']);
-
-  final result = await BaseGraphQLClient.instance.me();
-  GlobalStore.store.dispatch(GlobalActionCreator.setUser(AppUser(
-      name: result.data['me']['user']['name'],
-      email: result.data['me']['user']['email'])));
-
   if (_result['jwt'].toString().isNotEmpty) {
     SharedPreferences.getInstance().then((_p) async {
       _p.setString("jwt", _result['jwt']);
       _p.setString("userId", _result['user']['id'].toString());
+      print('jwt: ${_result['jwt'].toString()}');
+
+      await UserInfoOperate.whenLogin(_result['jwt'].toString());
 
       _goToMain(ctx);
     });
@@ -95,6 +76,8 @@ Future _onLoginClicked(Action action, Context<LoginPageState> ctx) async {
 }
 
 void _goToMain(Context<LoginPageState> ctx) async {
+  print('goToMain');
+
   await FirebaseMessaging.instance.getToken().then((String token) async {
     if (token != null) {
       print("_goToMain Push Messaging token: $token");
@@ -129,6 +112,7 @@ Future<Map<String, dynamic>> _emailSignIn(
       final _email = ctx.state.accountTextController.text.trim();
       final result = await BaseGraphQLClient.instance
           .loginWithEmail(_email, ctx.state.passWordTextController.text);
+      print('resultException: ${result.hasException}, ${result.exception}');
 
       if (result.hasException) {
         Toast.show("Error occurred", ctx.context,

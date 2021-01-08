@@ -1,5 +1,10 @@
 {
     "appname": "DoSparkles",
-    "welcome": "Welcome",
-    "continuebtn": "Continue"
+    "continuebtn": "Continue",
+
+    "storeSelectionPageTitle": "Choose Your Store",
+    "loginPageTitle": "Login",
+    "cartPageTitle": "Cart",
+    "productPageTitle": "Product",
+    "startPageTitle": "Welcome"
 }
