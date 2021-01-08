@@ -10,6 +10,8 @@ class AppConfig {
 
   String get graphQLHttpLink => _config['graphQLHttpLink'];
 
+  String get baseApiHost => _config['baseApiHost'];
+
   Future init(BuildContext context) async {
     final _jsonStr = await _getConfigJson(context);
     if (_jsonStr == null) {

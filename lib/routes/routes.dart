@@ -7,6 +7,7 @@ class Routes {
   static final PageRoutes routes = PageRoutes(
     pages: <String, Page<Object, dynamic>>{
       'startpage': StartPage(),
+      'loginpage': LoginPage(),
     },
     visitor: (String path, Page<Object, dynamic> page) {
       if (page.isTypeof<GlobalBaseState>()) {

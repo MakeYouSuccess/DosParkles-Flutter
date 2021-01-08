@@ -8,10 +8,9 @@ class GraphQLService {
   GraphQLClient _httpClient;
   GraphQLClient _websocketClient;
   void setupClient(
-      {@required String httpLink, @required String webSocketLink}) {
-    /*final AuthLink authLink = AuthLink(
-      getToken: () => token
-    );*/
+      {@required String httpLink,
+      @required String webSocketLink,
+      String token = ''}) {
 
     _httpLink = HttpLink(
       uri: httpLink,
@@ -23,11 +22,24 @@ class GraphQLService {
           inactivityTimeout: const Duration(minutes: 5),
         ));
 
-    //Link httpLink = authLink.concat(_httpLink);
-    //Link webSocketLink = authLink.concat(_webSocketLink);
+    if (token == '') {
+      _httpClient = GraphQLClient(
+          link: _httpLink, cache: cache);
+      _websocketClient = GraphQLClient(
+          link:_webSocketLink,
+          cache: cache);
+    } else {
+        final AuthLink authLink = AuthLink(getToken: () => 'Bearer $token');
 
-    _httpClient = GraphQLClient(link: _httpLink, cache: cache);
-    _websocketClient = GraphQLClient(link: _webSocketLink, cache: cache);
+        Link httpLinkWithAuth = authLink.concat(_httpLink);
+        Link webSocketLinkWithAuth = authLink.concat(_webSocketLink);
+
+        _httpClient = GraphQLClient(
+            link: httpLinkWithAuth, cache: cache);
+        _websocketClient = GraphQLClient(
+            link: webSocketLinkWithAuth, 
+            cache: cache);
+    }
   }
 
   Future<QueryResult> query(String query, {Map<String, dynamic> variables}) {
