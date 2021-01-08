@@ -21,6 +21,9 @@ Widget buildView(
   }
 
   return Scaffold(
+      // appBar: AppBar(
+      //       backgroundColor: HexColor("#182465"),
+      //       title: Text(AppLocalizations.of(context).welcome)),
     body: FutureBuilder(
         future: _checkContextInit(
           Stream<double>.periodic(Duration(milliseconds: 50),
@@ -65,12 +68,10 @@ class _FirstPage extends StatelessWidget {
         child: SafeArea(
       child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
         SizedBox(height: Adapt.px(300)),
-        
-
-        Text(
-          AppLocalizations.of(context).welcome, 
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-        ),
+        // Text(
+        //   AppLocalizations.of(context).welcome, 
+        //   style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
+        // ),
         SizedBox(height: Adapt.px(20)),
         Expanded(child: SizedBox()),
         GestureDetector(
