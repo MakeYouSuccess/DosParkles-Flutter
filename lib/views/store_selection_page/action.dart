@@ -11,7 +11,7 @@ class StoreSelectionPageActionCreator {
     return const Action(StoreSelectionPageAction.action);
   }
 
-  static Action storeSelected(StoreItem store) {
+  static Action onStoreSelected(StoreItem store) {
     return Action(StoreSelectionPageAction.storeSelected, payload: store);
   }
 }

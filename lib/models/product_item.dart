@@ -1,5 +1,4 @@
 import 'dart:convert' show json;
-import 'dart:ffi';
 import 'package:dosparkles/actions/app_config.dart';
 import 'package:flutter/material.dart';
 import 'package:dosparkles/utils/general.dart';

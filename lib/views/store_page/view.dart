@@ -1,3 +1,4 @@
+import 'package:dosparkles/models/models.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -6,6 +7,8 @@ import 'package:dosparkles/style/themestyle.dart';
 import 'package:dosparkles/utils/colors.dart';
 import 'package:dosparkles/widgets/sparkles_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'package:cached_network_image/cached_network_image.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -20,6 +23,7 @@ Widget buildView(
         _MainBody(
           animationController: state.animationController,
           dispatch: dispatch,
+          store: state.selectedStore,
         ),
       ],
     ),
@@ -74,10 +78,9 @@ class _AppBar extends StatelessWidget {
 class _MainBody extends StatelessWidget {
   final Dispatch dispatch;
   final AnimationController animationController;
-  const _MainBody({
-    this.animationController,
-    this.dispatch,
-  });
+  final StoreItem store;
+
+  const _MainBody({this.animationController, this.dispatch, this.store});
   @override
   Widget build(BuildContext context) {
     final cardCurve = CurvedAnimation(
@@ -93,16 +96,50 @@ class _MainBody extends StatelessWidget {
       child: SlideTransition(
         position:
             Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
-        child: Card(
-          elevation: 10,
-          child: Container(
-            height: Adapt.screenH() / 2,
-            width: Adapt.screenW() * 0.9,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[],
-            ),
-          ),
+        child: Container(
+          color: HexColor('#dfdada'),
+          child: CustomScrollView(slivers: <Widget>[
+            SliverGrid(
+              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 11.0,
+                crossAxisSpacing: 11.0,
+                childAspectRatio: 0.8,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (BuildContext context, int index) {
+                  return
+                      Container(
+                    color: HexColor('#dfdada'),
+                    child: Stack(children: <Widget>[
+                      Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: <Widget>[
+                           new Expanded(child: new CachedNetworkImage(
+                              imageUrl: store.products[index].thumbnailUrl,
+                              fit: BoxFit.cover,
+                            ),
+                           ),
+                          ]),
+                          
+                      Center(
+                        child: Container(
+                          width: 37,
+                          height: 54,
+                          decoration: BoxDecoration(
+                              image: DecorationImage(
+                            image: AssetImage("images/play.png"),
+                            fit: BoxFit.cover,
+                          )),
+                        ),
+                      ),
+                    ]),
+                  );
+                },
+                childCount: store.products.length,
+              ),
+            )
+          ]),
         ),
       ),
     );

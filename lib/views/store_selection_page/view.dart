@@ -116,7 +116,7 @@ class _MainBody extends StatelessWidget {
                             ),
                             onTap: () => {
                               dispatch(
-                                  StoreSelectionPageActionCreator.storeSelected(
+                                  StoreSelectionPageActionCreator.onStoreSelected(
                                       stores[index])),
                             },
                           ),
