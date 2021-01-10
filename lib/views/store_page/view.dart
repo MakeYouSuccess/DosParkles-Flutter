@@ -5,7 +5,6 @@ import 'package:dosparkles/actions/adapt.dart';
 import 'package:dosparkles/style/themestyle.dart';
 import 'package:dosparkles/utils/colors.dart';
 import 'package:dosparkles/widgets/sparkles_drawer.dart';
-
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'action.dart';
@@ -22,9 +21,11 @@ Widget buildView(
           animationController: state.animationController,
           dispatch: dispatch,
         ),
-        _AppBar(title: state.selectedStore.name),
       ],
     ),
+    appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60),
+        child: _AppBar(title: state.selectedStore.name)),
     drawer: SparklesDrawer(),
   );
 }
@@ -51,16 +52,21 @@ class _AppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 0.0,
-      left: 0.0,
-      right: 0.0,
-      child: AppBar(
-          brightness: Brightness.dark,
-          backgroundColor: HexColor('#01406F'),
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text(title)),
+    return AppBar(
+      title: Center(child: Text(title)),
+      flexibleSpace: Container(
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                HexColor('#3D9FB0'),
+                HexColor('#557084'),
+              ],
+              begin: const FractionalOffset(0.5, 0.5),
+              end: const FractionalOffset(0.5, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+      ),
     );
   }
 }

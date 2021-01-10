@@ -24,9 +24,10 @@ Widget buildView(
             animationController: state.animationController,
             dispatch: dispatch,
             stores: state.storesList),
-        _AppBar(),
       ],
     ),
+    appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(60), child: _AppBar()),
     drawer: SparklesDrawer(),
   );
 }
@@ -47,16 +48,22 @@ class _BackGround extends StatelessWidget {
 class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Positioned(
-      top: 0.0,
-      left: 0.0,
-      right: 0.0,
-      child: AppBar(
-          brightness: Brightness.dark,
-          backgroundColor: HexColor('#01406F'),
-          elevation: 0.0,
-          iconTheme: IconThemeData(color: Colors.white),
-          title: Text(AppLocalizations.of(context).storeSelectionPageTitle)),
+    return AppBar(
+      title: Center(
+          child: Text(AppLocalizations.of(context).storeSelectionPageTitle)),
+      flexibleSpace: Container(
+        decoration: new BoxDecoration(
+          gradient: new LinearGradient(
+              colors: [
+                HexColor('#3D9FB0'),
+                HexColor('#557084'),
+              ],
+              begin: const FractionalOffset(0.5, 0.5),
+              end: const FractionalOffset(0.5, 1.0),
+              stops: [0.0, 1.0],
+              tileMode: TileMode.clamp),
+        ),
+      ),
     );
   }
 }
@@ -83,13 +90,11 @@ class _MainBody extends StatelessWidget {
     );
     const Key centerKey = ValueKey('bottom-sliver-list');
 
-    printWrapped('stores ${stores.toString()}');
     return Center(
       child: SlideTransition(
           position:
               Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
           child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-            SizedBox(height: Adapt.px(200)),
             Flexible(
               child: CustomScrollView(
                 center: centerKey,
