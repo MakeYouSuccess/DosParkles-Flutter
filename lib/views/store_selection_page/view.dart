@@ -43,6 +43,7 @@ class _BackGround extends StatelessWidget {
     ]);
   }
 }
+
 class _AppBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -83,7 +84,6 @@ class _MainBody extends StatelessWidget {
     const Key centerKey = ValueKey('bottom-sliver-list');
 
     printWrapped('stores ${stores.toString()}');
-
     return Center(
       child: SlideTransition(
           position:
@@ -100,14 +100,22 @@ class _MainBody extends StatelessWidget {
                     delegate: SliverChildBuilderDelegate(
                       (BuildContext context, int index) {
                         return Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 2.0, vertical: 2.0),
+                          padding: EdgeInsets.symmetric(
+                              horizontal: 2.0, vertical: 2.0),
+                          child: InkWell(
                             child: Container(
                               alignment: Alignment.center,
                               color: Colors.grey,
                               height: 100,
                               child: Text('Store: ${stores[index].name}'),
-                            ));
+                            ),
+                            onTap: () => {
+                              dispatch(
+                                  StoreSelectionPageActionCreator.storeSelected(
+                                      stores[index])),
+                            },
+                          ),
+                        );
                       },
                       childCount: stores.length,
                     ),

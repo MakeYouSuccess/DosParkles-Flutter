@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:dosparkles/actions/adapt.dart';
 import 'package:dosparkles/style/themestyle.dart';
 import 'package:dosparkles/utils/colors.dart';
+import 'package:dosparkles/widgets/sparkles_drawer.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -21,9 +22,10 @@ Widget buildView(
           animationController: state.animationController,
           dispatch: dispatch,
         ),
-        _AppBar(),
+        _AppBar(title: state.selectedStore.name),
       ],
     ),
+    drawer: SparklesDrawer(),
   );
 }
 
@@ -41,6 +43,12 @@ class _BackGround extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
+  final String title;
+
+  const _AppBar({
+    this.title,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
@@ -48,19 +56,14 @@ class _AppBar extends StatelessWidget {
       left: 0.0,
       right: 0.0,
       child: AppBar(
-        brightness: Brightness.dark,
-        backgroundColor: HexColor('#01406F'),
-        elevation: 0.0,
-        iconTheme: IconThemeData(color: Colors.white),
-        // title: Text(AppLocalizations.of(context).storePageTitle)
-      ),
+          brightness: Brightness.dark,
+          backgroundColor: HexColor('#01406F'),
+          elevation: 0.0,
+          iconTheme: IconThemeData(color: Colors.white),
+          title: Text(title)),
     );
   }
 }
-
-
-
-
 
 class _MainBody extends StatelessWidget {
   final Dispatch dispatch;
@@ -79,7 +82,6 @@ class _MainBody extends StatelessWidget {
         curve: Curves.ease,
       ),
     );
-    
 
     return Center(
       child: SlideTransition(
@@ -92,8 +94,7 @@ class _MainBody extends StatelessWidget {
             width: Adapt.screenW() * 0.9,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-              ],
+              children: <Widget>[],
             ),
           ),
         ),

@@ -36,6 +36,12 @@ class LoginPageState implements GlobalBaseState, Cloneable<LoginPageState> {
 
   @override
   List<StoreItem> storesList;
+
+  @override
+  StoreItem selectedStore;
+
+  @override
+  ProductItem selectedProduct;
 }
 
 LoginPageState initState(Map<String, dynamic> args) {

@@ -13,6 +13,8 @@ Reducer<GlobalState> buildReducer() {
       GlobalAction.changeLocale: _onChangeLocale,
       GlobalAction.setUser: _onSetUser,
       GlobalAction.setStoresList: _onSetStoresList,
+      GlobalAction.setSelectedStore: _setSelectedStore,
+      GlobalAction.setSelectedProduct: _setSelectedProduct,
     },
   );
 }
@@ -31,3 +33,17 @@ GlobalState _onSetStoresList(GlobalState state, Action action) {
   final List<StoreItem> storesList = action.payload;
   return state.clone()..storesList = storesList;
 }
+
+GlobalState _setSelectedStore(GlobalState state, Action action) {
+  final StoreItem store = action.payload;
+  return state.clone()..selectedStore = store;
+}
+
+GlobalState _setSelectedProduct(GlobalState state, Action action) {
+  final ProductItem product = action.payload;
+  return state.clone()..selectedProduct = product;
+}
+
+
+
+

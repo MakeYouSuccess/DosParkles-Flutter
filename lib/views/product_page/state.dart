@@ -19,9 +19,15 @@ class ProductPageState
 
   @override
   AppUser user;
-  
+
   @override
   List<StoreItem> storesList;
+
+  @override
+  StoreItem selectedStore;
+
+  @override
+  ProductItem selectedProduct;
 }
 
 ProductPageState initState(Map<String, dynamic> args) {

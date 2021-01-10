@@ -1,5 +1,9 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
+import 'package:dosparkles/models/models.dart';
+
+import 'package:dosparkles/globalbasestate/store.dart';
+import 'package:dosparkles/globalbasestate/action.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -7,6 +11,7 @@ import 'state.dart';
 Effect<StoreSelectionPageState> buildEffect() {
   return combineEffects(<Object, Effect<StoreSelectionPageState>>{
     StoreSelectionPageAction.action: _onAction,
+    StoreSelectionPageAction.storeSelected: _onStoreSelected,
     Lifecycle.initState: _onInit,
     Lifecycle.build: _onBuild,
     Lifecycle.dispose: _onDispose
@@ -29,3 +34,11 @@ void _onDispose(Action action, Context<StoreSelectionPageState> ctx) {
 }
 
 void _onAction(Action action, Context<StoreSelectionPageState> ctx) {}
+
+void _onStoreSelected(
+    Action action, Context<StoreSelectionPageState> ctx) async {
+  StoreItem store = action.payload;
+  GlobalStore.store.dispatch(GlobalActionCreator.setSelectedStore(store));
+
+  await Navigator.of(ctx.context).pushReplacementNamed('storepage');
+}

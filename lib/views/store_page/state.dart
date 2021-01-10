@@ -13,7 +13,6 @@ class StorePageState
     return StorePageState()..animationController = animationController;
   }
 
-
   @override
   Locale locale;
 
@@ -22,6 +21,12 @@ class StorePageState
 
   @override
   List<StoreItem> storesList;
+
+  @override
+  StoreItem selectedStore;
+
+  @override
+  ProductItem selectedProduct;
 }
 
 StorePageState initState(Map<String, dynamic> args) {

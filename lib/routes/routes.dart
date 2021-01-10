@@ -26,6 +26,8 @@ class Routes {
               newState.locale = appState.locale;
               newState.user = appState.user;
               newState.storesList = appState.storesList;
+              newState.selectedStore = appState.selectedStore;
+              newState.selectedProduct = appState.selectedProduct;
               return newState;
             }
           }

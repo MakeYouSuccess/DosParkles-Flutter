@@ -11,6 +11,12 @@ abstract class GlobalBaseState {
 
   List<StoreItem> get storesList;
   set storesList(List<StoreItem> s);
+
+  StoreItem get selectedStore;
+  set selectedStore(StoreItem s);
+
+  ProductItem get selectedProduct;
+  set selectedProduct(ProductItem s);
 }
 
 class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
@@ -24,10 +30,18 @@ class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
   List<StoreItem> storesList;
 
   @override
+  StoreItem selectedStore;
+
+  @override
+  ProductItem selectedProduct;
+
+  @override
   GlobalState clone() {
     return GlobalState()
       ..locale = locale
       ..user = user
-      ..storesList = storesList;
+      ..storesList = storesList
+      ..selectedStore = selectedStore
+      ..selectedProduct = selectedProduct;
   }
 }

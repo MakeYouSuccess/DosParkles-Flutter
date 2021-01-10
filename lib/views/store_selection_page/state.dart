@@ -22,6 +22,12 @@ class StoreSelectionPageState
 
   @override
   List<StoreItem> storesList;
+
+  @override
+  StoreItem selectedStore;
+
+  @override
+  ProductItem selectedProduct;
 }
 
 StoreSelectionPageState initState(Map<String, dynamic> args) {
