@@ -25,6 +25,7 @@ class Routes {
               final GlobalBaseState newState = copy;
               newState.locale = appState.locale;
               newState.user = appState.user;
+              newState.storesList = appState.storesList;
               return newState;
             }
           }

@@ -30,3 +30,18 @@ TimeOfDay timeConvert(String normTime, {bool amPm = false}) {
     return TimeOfDay(hour: hour, minute: minute);
   }
 }
+
+extension BoolParsing on String {
+  bool parseBool() {
+    return this.toLowerCase() == 'true';
+  }
+}
+
+double checkDouble(dynamic value) {
+  if (value == null) return 0.0;
+  if (value is String) {
+    return double.parse(value);
+  } else {
+    return value + 0.0;
+  }
+}

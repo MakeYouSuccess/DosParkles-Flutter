@@ -40,7 +40,7 @@ void _onInit(Action action, Context<StartPageState> ctx) async {
     if (!_isFirst) {
       await _pushToSignInPage(ctx.context);
     } else
-      ctx.dispatch(StartPageActionCreator.setIsFirst(false));
+      ctx.dispatch(StartPageActionCreator.setIsFirst(_isFirst));
   });
 }
 

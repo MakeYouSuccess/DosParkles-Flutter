@@ -2,7 +2,7 @@ import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dosparkles/globalbasestate/state.dart';
-import 'package:dosparkles/models/app_user.dart';
+import 'package:dosparkles/models/models.dart';
 
 class ProductPageState
     implements GlobalBaseState, Cloneable<ProductPageState> {
@@ -13,14 +13,15 @@ class ProductPageState
     return ProductPageState()..animationController = animationController;
   }
 
-  @override
-  Color themeColor;
 
   @override
   Locale locale;
 
   @override
   AppUser user;
+  
+  @override
+  List<StoreItem> storesList;
 }
 
 ProductPageState initState(Map<String, dynamic> args) {

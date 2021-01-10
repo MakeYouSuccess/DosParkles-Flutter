@@ -2,10 +2,9 @@ import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dosparkles/globalbasestate/state.dart';
-import 'package:dosparkles/models/app_user.dart';
+import 'package:dosparkles/models/models.dart';
 
-class CartPageState
-    implements GlobalBaseState, Cloneable<CartPageState> {
+class CartPageState implements GlobalBaseState, Cloneable<CartPageState> {
   AnimationController animationController;
 
   @override
@@ -13,14 +12,15 @@ class CartPageState
     return CartPageState()..animationController = animationController;
   }
 
-  @override
-  Color themeColor;
 
   @override
   Locale locale;
 
   @override
   AppUser user;
+
+  @override
+  List<StoreItem> storesList;
 }
 
 CartPageState initState(Map<String, dynamic> args) {

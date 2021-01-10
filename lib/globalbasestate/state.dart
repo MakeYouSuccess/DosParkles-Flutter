@@ -1,6 +1,6 @@
 import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
-import 'package:dosparkles/models/app_user.dart';
+import 'package:dosparkles/models/models.dart';
 
 abstract class GlobalBaseState {
   Locale get locale;
@@ -8,6 +8,9 @@ abstract class GlobalBaseState {
 
   AppUser get user;
   set user(AppUser u);
+
+  List<StoreItem> get storesList;
+  set storesList(List<StoreItem> s);
 }
 
 class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
@@ -18,9 +21,13 @@ class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
   AppUser user;
 
   @override
+  List<StoreItem> storesList;
+
+  @override
   GlobalState clone() {
     return GlobalState()
       ..locale = locale
-      ..user = user;
+      ..user = user
+      ..storesList = storesList;
   }
 }

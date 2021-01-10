@@ -34,9 +34,7 @@ void _onInit(Action action, Context<LoginPageState> ctx) async {
   ctx.state.accountTextController = TextEditingController();
   ctx.state.passWordTextController = TextEditingController();
 
-  print('user Login: ${ctx.state.user}');
   if (ctx.state.user != null) {
-    print('user not null');
     _goToMain(ctx);
   }
 }
@@ -76,7 +74,6 @@ Future _onLoginClicked(Action action, Context<LoginPageState> ctx) async {
 }
 
 void _goToMain(Context<LoginPageState> ctx) async {
-  print('goToMain');
 
   await FirebaseMessaging.instance.getToken().then((String token) async {
     if (token != null) {

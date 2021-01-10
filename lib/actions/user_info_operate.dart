@@ -13,8 +13,6 @@ class UserInfoOperate {
     final meRequest = await BaseGraphQLClient.instance.me();
     final user = ModelFactory.generate<AppUser>(meRequest.data['me']['user']);
     GlobalStore.store.dispatch(GlobalActionCreator.setUser(user));
-
-    printWrapped('user whenLogin: $user');
   }
 
   static Future<bool> whenLogout() async {
@@ -31,11 +29,9 @@ class UserInfoOperate {
   }
 
   static Future whenAppStart() async {
-    print("whenAppStart UserInfo");
     SharedPreferences _preferences = await SharedPreferences.getInstance();
 
     final savedToken = _preferences.getString('jwt') ?? '';
-    print('savedToken $savedToken');
 
     if (savedToken.isNotEmpty) {
       whenLogin(savedToken);

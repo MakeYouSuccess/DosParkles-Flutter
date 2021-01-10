@@ -81,6 +81,7 @@ class BaseGraphQLClient {
     String _query = '''
     query {
       stores {
+          id
           name
           address
           phone
@@ -108,8 +109,6 @@ class BaseGraphQLClient {
             media {
               url
             }
-            deliveryInformation
-            name
             deliveryInformation
             name
             weight
