@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:dosparkles/models/models.dart';
 
-enum GlobalAction { changeLocale, setUser, setStoresList, setSelectedStore, setSelectedProduct }
+enum GlobalAction { changeLocale, setUser, setStoresList, setSelectedStore, setSelectedProduct, setShoppingCart }
 
 class GlobalActionCreator {
 
@@ -25,5 +25,9 @@ class GlobalActionCreator {
 
   static Action setSelectedProduct(ProductItem product) {
     return Action(GlobalAction.setSelectedProduct, payload: product);
+  } 
+
+  static Action setShoppingCart(Map<ProductItem, int> cart) {
+    return Action(GlobalAction.setShoppingCart, payload: cart);
   } 
 }

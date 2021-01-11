@@ -69,7 +69,7 @@ class SparklesDrawer extends StatelessWidget {
             onTap: () async {
               await UserInfoOperate.whenLogout();
 
-              await Navigator.of(context).pushReplacementNamed('startpage');
+              Navigator.of(context).pushReplacementNamed('startpage');
               Navigator.pop(context);
             },
           ),

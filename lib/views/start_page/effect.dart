@@ -7,6 +7,12 @@ import 'state.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+
+import 'package:dosparkles/models/models.dart';
+
+import 'package:dosparkles/globalbasestate/store.dart';
+import 'package:dosparkles/globalbasestate/action.dart';
+
 import 'package:dosparkles/actions/user_info_operate.dart';
 import 'package:dosparkles/actions/stores_info_operate.dart';
 
@@ -25,6 +31,8 @@ void _onAction(Action action, Context<StartPageState> ctx) {}
 Future _loadData() async {
   await UserInfoOperate.whenAppStart();
   await StoresInfoOperate.whenAppStart();
+
+  GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(new Map<ProductItem, int>()));
 }
 
 void _onInit(Action action, Context<StartPageState> ctx) async {

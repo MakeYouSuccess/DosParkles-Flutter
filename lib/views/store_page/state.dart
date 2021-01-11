@@ -1,8 +1,10 @@
 import 'dart:ui';
+import 'package:dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart';
 import 'package:dosparkles/globalbasestate/state.dart';
 import 'package:dosparkles/models/models.dart';
+import 'package:flutter/material.dart';
 
 class StorePageState implements GlobalBaseState, Cloneable<StorePageState> {
   AnimationController animationController;
@@ -15,12 +17,13 @@ class StorePageState implements GlobalBaseState, Cloneable<StorePageState> {
       ..animationController = animationController
       ..listView = listView
       ..productIndex = productIndex
-      // 
+      //
       ..locale = locale
       ..user = user
       ..storesList = storesList
       ..selectedStore = selectedStore
-      ..selectedProduct = selectedProduct;
+      ..selectedProduct = selectedProduct
+      ..shoppingCart = shoppingCart;
   }
 
   @override
@@ -37,8 +40,20 @@ class StorePageState implements GlobalBaseState, Cloneable<StorePageState> {
 
   @override
   ProductItem selectedProduct;
+
+  @override
+  Map<ProductItem, int> shoppingCart;
 }
 
 StorePageState initState(Map<String, dynamic> args) {
-  return StorePageState();
+  print('StorePageState, initState, args: $args');
+  StorePageState state = StorePageState();
+  state.listView = true;
+  if (args != null) {
+    if (args['listView'] != null) {
+      state.listView = args['listView'];
+    }
+  }
+
+  return state;
 }

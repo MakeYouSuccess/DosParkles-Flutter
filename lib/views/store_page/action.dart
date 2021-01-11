@@ -4,7 +4,7 @@ import 'package:fish_redux/fish_redux.dart';
 enum StorePageAction {
   action,
   productIndexSelected,
-  addToCart,
+  goToProductPage,
   backToAllProducts,
 }
 
@@ -17,8 +17,8 @@ class StorePageActionCreator {
     return Action(StorePageAction.productIndexSelected, payload: productIndex);
   }
 
-  static Action onAddToCart(ProductItem product) {
-    return Action(StorePageAction.addToCart, payload: product);
+  static Action onGoToProductPage(ProductItem product) {
+    return Action(StorePageAction.goToProductPage, payload: product);
   }
 
   static Action onBackToAllProducts() {

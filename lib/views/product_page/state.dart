@@ -4,15 +4,21 @@ import 'package:flutter/widgets.dart';
 import 'package:dosparkles/globalbasestate/state.dart';
 import 'package:dosparkles/models/models.dart';
 
-class ProductPageState
-    implements GlobalBaseState, Cloneable<ProductPageState> {
+class ProductPageState implements GlobalBaseState, Cloneable<ProductPageState> {
   AnimationController animationController;
 
   @override
   ProductPageState clone() {
-    return ProductPageState()..animationController = animationController;
+    return ProductPageState()
+      ..animationController = animationController
+      //
+      ..locale = locale
+      ..user = user
+      ..storesList = storesList
+      ..selectedStore = selectedStore
+      ..selectedProduct = selectedProduct
+      ..shoppingCart = shoppingCart;
   }
-
 
   @override
   Locale locale;
@@ -28,6 +34,9 @@ class ProductPageState
 
   @override
   ProductItem selectedProduct;
+
+ @override
+  Map<ProductItem, int> shoppingCart;
 }
 
 ProductPageState initState(Map<String, dynamic> args) {

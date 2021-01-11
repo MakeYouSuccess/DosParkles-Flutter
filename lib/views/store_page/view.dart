@@ -19,40 +19,27 @@ import 'state.dart';
 
 Widget buildView(
     StorePageState state, Dispatch dispatch, ViewService viewService) {
-  print('state.selectedStore: ${state.selectedStore}');
   Adapt.initContext(viewService.context);
   return Scaffold(
     resizeToAvoidBottomPadding: false,
-    body: GestureDetector(
-      // Using the DragEndDetails allows us to only fire once per swipe.
-      onHorizontalDragEnd: (dragEndDetails) {
-        if (dragEndDetails.primaryVelocity < 0) {
-          // Page forwards
-          dispatch(StorePageActionCreator.onAddToCart(null));
-        } else if (dragEndDetails.primaryVelocity > 0) {
-          // Page backwards
-          dispatch(StorePageActionCreator.onBackToAllProducts());
-        }
-      },
-      child: Stack(
-        children: <Widget>[
-          _BackGround(controller: state.animationController),
-          AnimatedSwitcher(
-              duration: Duration(milliseconds: 300),
-              child: state.listView
-                  ? _ListView(
-                      animationController: state.animationController,
-                      dispatch: dispatch,
-                      store: state.selectedStore,
-                    )
-                  : _ProductView(
-                      animationController: state.animationController,
-                      dispatch: dispatch,
-                      store: state.selectedStore,
-                      productIndex: state.productIndex,
-                    )),
-        ],
-      ),
+    body: Stack(
+      children: <Widget>[
+        _BackGround(controller: state.animationController),
+        AnimatedSwitcher(
+            duration: Duration(milliseconds: 300),
+            child: state.listView
+                ? _ListView(
+                    animationController: state.animationController,
+                    dispatch: dispatch,
+                    store: state.selectedStore,
+                  )
+                : _ProductView(
+                    animationController: state.animationController,
+                    dispatch: dispatch,
+                    store: state.selectedStore,
+                    productIndex: state.productIndex,
+                  )),
+      ],
     ),
     appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -118,7 +105,7 @@ class _ListView extends StatelessWidget {
         curve: Curves.ease,
       ),
     );
-
+    printWrapped('store.products: ${store.products}');
     return Center(
       child: SlideTransition(
         position:
@@ -185,13 +172,13 @@ class _ProductView extends StatefulWidget {
   final StoreItem store;
   final int productIndex;
 
-  _ProductView({
-    Key key,
-    this.animationController,
-    this.dispatch,
-    this.store,
-    this.productIndex,
-  }) : super(key: key);
+  _ProductView(
+      {Key key,
+      this.animationController,
+      this.dispatch,
+      this.store,
+      this.productIndex})
+      : super(key: key);
 
   @override
   _ProductViewState createState() => _ProductViewState();
@@ -200,19 +187,22 @@ class _ProductView extends StatefulWidget {
 class _ProductViewState extends State<_ProductView>
     with SingleTickerProviderStateMixin {
   TabController _tabController;
+  int _tabSelectedIndex;
 
   @override
   void initState() {
     super.initState();
+    _tabSelectedIndex = widget.productIndex;
     _tabController =
         TabController(length: widget.store.products.length, vsync: this);
+    _tabController
+        .addListener(() => {_tabSelectedIndex = _tabController.index});
   }
 
   @override
   void dispose() {
     // TODO: implement dispose
     super.dispose();
-    _tabController.dispose();
   }
 
   @override
@@ -226,19 +216,30 @@ class _ProductViewState extends State<_ProductView>
     }
 
     var size = MediaQuery.of(context).size;
-    return RotatedBox(
-      quarterTurns: 1,
-      child: TabBarView(
-        controller: _tabController,
-        children: List.generate(items.length, (index) {
-          print('items[index].videoUrl: ${items[index].videoUrl}');
-          return VideoPlayerItem(
-            videoUrl: items[index].videoUrl,
-            size: size,
-            // name: items[index].name,
-            // price: '\$${items[index].price}',
-          );
-        }),
+    return GestureDetector(
+      // Using the DragEndDetails allows us to only fire once per swipe.
+      onHorizontalDragEnd: (dragEndDetails) {
+        if (dragEndDetails.primaryVelocity < 0) {
+          // Page forwards
+          widget.dispatch(StorePageActionCreator.onGoToProductPage(widget.store.products[_tabSelectedIndex]));
+        } else if (dragEndDetails.primaryVelocity > 0) {
+          // Page backwards
+          widget.dispatch(StorePageActionCreator.onBackToAllProducts());
+        }
+      },
+      child: RotatedBox(
+        quarterTurns: 1,
+        child: TabBarView(
+          controller: _tabController,
+          children: List.generate(items.length, (index) {
+            return VideoPlayerItem(
+              videoUrl: items[index].videoUrl,
+              size: size,
+              // name: items[index].name,
+              // price: '\$${items[index].price}',
+            );
+          }),
+        ),
       ),
     );
   }
@@ -321,7 +322,16 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                     decoration: BoxDecoration(color: Colors.black),
                     child: Stack(
                       children: <Widget>[
-                        VideoPlayer(_videoController),
+                        SizedBox.expand(
+                          child: FittedBox(
+                            fit: BoxFit.cover,
+                            child: SizedBox(
+                              width: _videoController.value.size?.width ?? 0,
+                              height: _videoController.value.size?.height ?? 0,
+                              child: VideoPlayer(_videoController),
+                            ),
+                          ),
+                        ),
                         Center(
                           child: Container(
                             decoration: BoxDecoration(),

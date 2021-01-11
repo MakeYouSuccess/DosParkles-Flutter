@@ -15,6 +15,7 @@ Reducer<GlobalState> buildReducer() {
       GlobalAction.setStoresList: _onSetStoresList,
       GlobalAction.setSelectedStore: _setSelectedStore,
       GlobalAction.setSelectedProduct: _setSelectedProduct,
+      GlobalAction.setShoppingCart: _setShoppingCart,
     },
   );
 }
@@ -44,6 +45,10 @@ GlobalState _setSelectedProduct(GlobalState state, Action action) {
   return state.clone()..selectedProduct = product;
 }
 
+GlobalState _setShoppingCart(GlobalState state, Action action) {
+  final Map<ProductItem, int> cart = action.payload;
+  return state.clone()..shoppingCart = cart;
+}
 
 
 

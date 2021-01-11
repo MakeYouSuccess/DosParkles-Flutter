@@ -28,6 +28,7 @@ class Routes {
               newState.storesList = appState.storesList;
               newState.selectedStore = appState.selectedStore;
               newState.selectedProduct = appState.selectedProduct;
+              newState.shoppingCart = appState.shoppingCart;
               return newState;
             }
           }

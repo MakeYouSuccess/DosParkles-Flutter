@@ -11,7 +11,7 @@ import 'state.dart';
 Effect<StorePageState> buildEffect() {
   return combineEffects(<Object, Effect<StorePageState>>{
     StorePageAction.action: _onAction,
-    StorePageAction.addToCart: onAddToCart,
+    StorePageAction.goToProductPage: onGoToProductPage,
     Lifecycle.initState: _onInit,
     Lifecycle.build: _onBuild,
     Lifecycle.dispose: _onDispose
@@ -20,14 +20,29 @@ Effect<StorePageState> buildEffect() {
 
 void _onInit(Action action, Context<StorePageState> ctx) async {
   final Object ticker = ctx.stfState;
-  ctx.state..listView = true;
   ctx.state.animationController = AnimationController(
       vsync: ticker, duration: Duration(milliseconds: 2000));
+
+  if (ctx.state.productIndex == null) {
+    if (ctx.state.selectedStore != null && ctx.state.selectedProduct != null) {
+      for (var i = 0; i < ctx.state.selectedStore.products.length; i++) {
+        if (ctx.state.selectedStore.products[i].id ==
+            ctx.state.selectedProduct.id) {
+          ctx.state.productIndex = i;
+          break;
+        }
+      }
+    } else {
+      ctx.state.listView = true;
+    }
+  }
 }
 
 void _onBuild(Action action, Context<StorePageState> ctx) {
-  // Future.delayed(Duration(milliseconds: 150),
-  //     () => ctx.state.animationController.forward());
+  if (ctx.state.animationController != null) {
+    Future.delayed(Duration(milliseconds: 150),
+        () => ctx.state.animationController.forward());
+  }
 }
 
 void _onDispose(Action action, Context<StorePageState> ctx) {
@@ -36,4 +51,9 @@ void _onDispose(Action action, Context<StorePageState> ctx) {
 
 void _onAction(Action action, Context<StorePageState> ctx) {}
 
-void onAddToCart(Action action, Context<StorePageState> ctx) {}
+void onGoToProductPage(Action action, Context<StorePageState> ctx) async {
+  ProductItem product = action.payload;
+  GlobalStore.store.dispatch(GlobalActionCreator.setSelectedProduct(product));
+
+  await Navigator.of(ctx.context).pushReplacementNamed('productpage');
+}

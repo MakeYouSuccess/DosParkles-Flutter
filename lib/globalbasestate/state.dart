@@ -17,6 +17,9 @@ abstract class GlobalBaseState {
 
   ProductItem get selectedProduct;
   set selectedProduct(ProductItem s);
+
+  Map<ProductItem, int> get shoppingCart;
+  set shoppingCart(Map<ProductItem, int> s);
 }
 
 class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
@@ -36,12 +39,16 @@ class GlobalState implements GlobalBaseState, Cloneable<GlobalState> {
   ProductItem selectedProduct;
 
   @override
+  Map<ProductItem, int> shoppingCart;
+
+  @override
   GlobalState clone() {
     return GlobalState()
       ..locale = locale
       ..user = user
       ..storesList = storesList
       ..selectedStore = selectedStore
-      ..selectedProduct = selectedProduct;
+      ..selectedProduct = selectedProduct
+      ..shoppingCart = shoppingCart;
   }
 }

@@ -111,9 +111,14 @@ class ProductItem {
         checkDouble(jsonRes['optionalFinishMaterialPrice']);
     optionalFinishMaterialEnabled = jsonRes['optionalFinishMaterialEnabled'];
 
-    mediaUrls = jsonRes['media']
-        .map((item) => AppConfig.instance.baseApiHost + item['url'].toString())
-        .toList();
+    if (jsonRes['media'] != null) {
+      mediaUrls = jsonRes['media']
+          .map(
+              (item) => AppConfig.instance.baseApiHost + item['url'].toString())
+          .toList();
+    } else {
+      mediaUrls = List.empty();
+    }
 
     deliveryInformation = jsonRes['deliveryInformation'];
     weight = checkDouble(jsonRes['weight']);
