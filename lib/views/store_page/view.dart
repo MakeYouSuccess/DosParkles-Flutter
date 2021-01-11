@@ -1,5 +1,7 @@
 import 'package:dosparkles/models/models.dart';
+import 'package:dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
+import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:dosparkles/actions/adapt.dart';
@@ -10,22 +12,47 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 
+import 'package:video_player/video_player.dart';
+
 import 'action.dart';
 import 'state.dart';
 
 Widget buildView(
     StorePageState state, Dispatch dispatch, ViewService viewService) {
+  print('state.selectedStore: ${state.selectedStore}');
+  Adapt.initContext(viewService.context);
   return Scaffold(
     resizeToAvoidBottomPadding: false,
-    body: Stack(
-      children: <Widget>[
-        _BackGround(controller: state.animationController),
-        _MainBody(
-          animationController: state.animationController,
-          dispatch: dispatch,
-          store: state.selectedStore,
-        ),
-      ],
+    body: GestureDetector(
+      // Using the DragEndDetails allows us to only fire once per swipe.
+      onHorizontalDragEnd: (dragEndDetails) {
+        if (dragEndDetails.primaryVelocity < 0) {
+          // Page forwards
+          dispatch(StorePageActionCreator.onAddToCart(null));
+        } else if (dragEndDetails.primaryVelocity > 0) {
+          // Page backwards
+          dispatch(StorePageActionCreator.onBackToAllProducts());
+        }
+      },
+      child: Stack(
+        children: <Widget>[
+          _BackGround(controller: state.animationController),
+          AnimatedSwitcher(
+              duration: Duration(milliseconds: 300),
+              child: state.listView
+                  ? _ListView(
+                      animationController: state.animationController,
+                      dispatch: dispatch,
+                      store: state.selectedStore,
+                    )
+                  : _ProductView(
+                      animationController: state.animationController,
+                      dispatch: dispatch,
+                      store: state.selectedStore,
+                      productIndex: state.productIndex,
+                    )),
+        ],
+      ),
     ),
     appBar: PreferredSize(
         preferredSize: const Size.fromHeight(60),
@@ -75,12 +102,12 @@ class _AppBar extends StatelessWidget {
   }
 }
 
-class _MainBody extends StatelessWidget {
+class _ListView extends StatelessWidget {
   final Dispatch dispatch;
   final AnimationController animationController;
   final StoreItem store;
 
-  const _MainBody({this.animationController, this.dispatch, this.store});
+  const _ListView({this.animationController, this.dispatch, this.store});
   @override
   Widget build(BuildContext context) {
     final cardCurve = CurvedAnimation(
@@ -108,39 +135,287 @@ class _MainBody extends StatelessWidget {
               ),
               delegate: SliverChildBuilderDelegate(
                 (BuildContext context, int index) {
-                  return
-                      Container(
-                    color: HexColor('#dfdada'),
-                    child: Stack(children: <Widget>[
-                      Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: <Widget>[
-                           new Expanded(child: new CachedNetworkImage(
-                              imageUrl: store.products[index].thumbnailUrl,
-                              fit: BoxFit.cover,
+                  return InkWell(
+                      child: Container(
+                        color: HexColor('#dfdada'),
+                        child: Stack(children: <Widget>[
+                          Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: <Widget>[
+                                new Expanded(
+                                  child: new CachedNetworkImage(
+                                    imageUrl:
+                                        store.products[index].thumbnailUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ]),
+                          Center(
+                            child: Container(
+                              width: 37,
+                              height: 54,
+                              decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                image: AssetImage("images/play.png"),
+                                fit: BoxFit.cover,
+                              )),
                             ),
-                           ),
-                          ]),
-                          
-                      Center(
-                        child: Container(
-                          width: 37,
-                          height: 54,
-                          decoration: BoxDecoration(
-                              image: DecorationImage(
-                            image: AssetImage("images/play.png"),
-                            fit: BoxFit.cover,
-                          )),
-                        ),
+                          ),
+                        ]),
                       ),
-                    ]),
-                  );
+                      onTap: () => {
+                            dispatch(
+                                StorePageActionCreator.onProductIndexSelected(
+                                    index)),
+                          });
                 },
                 childCount: store.products.length,
               ),
             )
           ]),
         ),
+      ),
+    );
+  }
+}
+
+class _ProductView extends StatefulWidget {
+  final Dispatch dispatch;
+  final AnimationController animationController;
+  final StoreItem store;
+  final int productIndex;
+
+  _ProductView({
+    Key key,
+    this.animationController,
+    this.dispatch,
+    this.store,
+    this.productIndex,
+  }) : super(key: key);
+
+  @override
+  _ProductViewState createState() => _ProductViewState();
+}
+
+class _ProductViewState extends State<_ProductView>
+    with SingleTickerProviderStateMixin {
+  TabController _tabController;
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController =
+        TabController(length: widget.store.products.length, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _tabController.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    List<ProductItem> items = List.empty(growable: true);
+    for (var i = widget.productIndex; i < widget.store.products.length; i++) {
+      items.add(widget.store.products[i]);
+    }
+    for (var i = 0; i < widget.productIndex; i++) {
+      items.add(widget.store.products[i]);
+    }
+
+    var size = MediaQuery.of(context).size;
+    return RotatedBox(
+      quarterTurns: 1,
+      child: TabBarView(
+        controller: _tabController,
+        children: List.generate(items.length, (index) {
+          print('items[index].videoUrl: ${items[index].videoUrl}');
+          return VideoPlayerItem(
+            videoUrl: items[index].videoUrl,
+            size: size,
+            // name: items[index].name,
+            // price: '\$${items[index].price}',
+          );
+        }),
+      ),
+    );
+  }
+}
+
+class VideoPlayerItem extends StatefulWidget {
+  final String videoUrl;
+  // final String name;
+  // final String price;
+
+  VideoPlayerItem(
+      {Key key,
+      @required this.size,
+      // this.name, this.price,
+      this.videoUrl})
+      : super(key: key);
+
+  final Size size;
+
+  @override
+  _VideoPlayerItemState createState() => _VideoPlayerItemState();
+}
+
+class _VideoPlayerItemState extends State<VideoPlayerItem> {
+  VideoPlayerController _videoController;
+  bool isShowPlaying = false;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _videoController = VideoPlayerController.network(widget.videoUrl)
+      ..initialize().then((value) {
+        _videoController.setLooping(true);
+        _videoController.play();
+        setState(() {
+          isShowPlaying = false;
+        });
+      });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _videoController.dispose();
+  }
+
+  Widget isPlaying() {
+    return _videoController.value.isPlaying && !isShowPlaying
+        ? Container()
+        : Icon(
+            Icons.play_arrow,
+            size: 80,
+            color: Colors.white.withOpacity(0.5),
+          );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          setState(() {
+            _videoController.value.isPlaying
+                ? _videoController.pause()
+                : _videoController.play();
+          });
+        },
+        child: RotatedBox(
+          quarterTurns: -1,
+          child: Container(
+              height: widget.size.height,
+              width: widget.size.width,
+              child: Stack(
+                children: <Widget>[
+                  Container(
+                    height: widget.size.height,
+                    width: widget.size.width,
+                    decoration: BoxDecoration(color: Colors.black),
+                    child: Stack(
+                      children: <Widget>[
+                        VideoPlayer(_videoController),
+                        Center(
+                          child: Container(
+                            decoration: BoxDecoration(),
+                            child: isPlaying(),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: widget.size.height,
+                    width: widget.size.width,
+                    child: Padding(
+                      padding: const EdgeInsets.only(
+                          left: 15, top: 20, right: 15, bottom: 10),
+                      child: SafeArea(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            Expanded(
+                                child: Row(
+                              children: <Widget>[
+                                LeftPanel(
+                                  size: widget.size,
+                                  // name: "${widget.name}",
+                                  // price: "${widget.price}",
+                                ),
+                              ],
+                            ))
+                          ],
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )),
+        ));
+  }
+}
+
+class LeftPanel extends StatelessWidget {
+  // final String name;
+  // final String price;
+  const LeftPanel({
+    Key key,
+    @required this.size,
+    // this.name,
+    // this.price,
+  }) : super(key: key);
+
+  final Size size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: size.width - 30,
+      height: size.height,
+      decoration: BoxDecoration(),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          Center(
+              child: Text(
+            'Scroll to see more product videos',
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          )),
+          Center(
+              child: Text(
+            'Swipe left to go to products',
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          )),
+          Spacer(),
+          // Text(
+          //   name,
+          //   style: TextStyle(
+          //       color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
+          // ),
+          // SizedBox(
+          //   height: 10,
+          // ),
+          // Text(
+          //   price,
+          //   style: TextStyle(color: Colors.white),
+          // ),
+          SizedBox(
+            height: 5,
+          ),
+          Center(
+              child: Text(
+            'Swipe right for Shop Now',
+            style: TextStyle(color: Colors.white, fontSize: 25),
+          )),
+        ],
       ),
     );
   }

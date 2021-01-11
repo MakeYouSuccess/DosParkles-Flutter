@@ -12,6 +12,8 @@ class ProductItem {
 
   String thumbnailUrl;
 
+  String videoUrl;
+
   double oldPrice;
 
   double price;
@@ -53,6 +55,7 @@ class ProductItem {
       this.name,
       this.shineonId,
       this.thumbnailUrl,
+      this.videoUrl,
       this.oldPrice,
       this.price,
       this.showOldPrice,
@@ -84,6 +87,10 @@ class ProductItem {
     shineonId = jsonRes['shineonId'];
     thumbnailUrl = jsonRes['thumbnail'] != null
         ? AppConfig.instance.baseApiHost + jsonRes['thumbnail']['url']
+        : null;
+
+    videoUrl = jsonRes['video'] != null
+        ? AppConfig.instance.baseApiHost + jsonRes['video']['url']
         : null;
 
     oldPrice = checkDouble(jsonRes['oldPrice']);

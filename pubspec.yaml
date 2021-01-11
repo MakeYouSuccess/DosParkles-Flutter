@@ -38,9 +38,11 @@ dependencies:
   toast: ^0.1.5
   dio: ^3.0.9
   dio_http_cache: ^0.2.5
+  provider: ^4.0.5
   lottie: ^0.4.0+1
   font_awesome_flutter: ^8.5.0
   cached_network_image: ^2.0.0
+  flick_video_player: ^0.1.1
   package_info: ^0.4.0+16
   dart_strapi: ^0.0.3
   table_calendar: ^2.3.0

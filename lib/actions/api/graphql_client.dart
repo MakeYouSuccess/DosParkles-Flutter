@@ -94,6 +94,9 @@ class BaseGraphQLClient {
             thumbnail {
               url
             }
+            video {
+              url
+            }
             oldPrice
             price
             showOldPrice

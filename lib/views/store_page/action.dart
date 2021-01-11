@@ -3,30 +3,25 @@ import 'package:fish_redux/fish_redux.dart';
 
 enum StorePageAction {
   action,
-  productSelected,
+  productIndexSelected,
+  addToCart,
   backToAllProducts,
-  nextProduct,
-  prevProduct
 }
 
 class StorePageActionCreator {
   static Action onAction() {
     return const Action(StorePageAction.action);
   }
-  
-  static Action onProductSelected(ProductItem product) {
-    return Action(StorePageAction.productSelected, payload: product);
+
+  static Action onProductIndexSelected(int productIndex) {
+    return Action(StorePageAction.productIndexSelected, payload: productIndex);
+  }
+
+  static Action onAddToCart(ProductItem product) {
+    return Action(StorePageAction.addToCart, payload: product);
   }
 
   static Action onBackToAllProducts() {
     return const Action(StorePageAction.backToAllProducts);
-  }
-
-  static Action onNextProduct() {
-    return const Action(StorePageAction.nextProduct);
-  }
-
-  static Action onPrevProduct() {
-    return const Action(StorePageAction.prevProduct);
   }
 }

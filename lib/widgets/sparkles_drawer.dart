@@ -67,7 +67,7 @@ class SparklesDrawer extends StatelessWidget {
               style: TextStyle(color: HexColor("#d93731")),
             ),
             onTap: () async {
-              UserInfoOperate.whenLogout();
+              await UserInfoOperate.whenLogout();
 
               await Navigator.of(context).pushReplacementNamed('startpage');
               Navigator.pop(context);
