@@ -97,6 +97,12 @@ class BaseGraphQLClient {
             video {
               url
             }
+            engraveExample {
+              url
+            }
+            optionalMaterialExample {
+              url
+            }
             oldPrice
             price
             showOldPrice

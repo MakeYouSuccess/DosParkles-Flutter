@@ -6,11 +6,17 @@ import 'package:dosparkles/models/models.dart';
 
 class ProductPageState implements GlobalBaseState, Cloneable<ProductPageState> {
   AnimationController animationController;
+  dynamic engraveInputs;
+  bool optionalMaterialSelected;
+  int productQuantity;
 
   @override
   ProductPageState clone() {
     return ProductPageState()
       ..animationController = animationController
+      ..engraveInputs = engraveInputs
+      ..optionalMaterialSelected = optionalMaterialSelected
+      ..productQuantity = productQuantity
       //
       ..locale = locale
       ..user = user
@@ -35,10 +41,12 @@ class ProductPageState implements GlobalBaseState, Cloneable<ProductPageState> {
   @override
   ProductItem selectedProduct;
 
- @override
-  Map<ProductItem, int> shoppingCart;
+  @override
+   List<CartItem> shoppingCart;
 }
 
 ProductPageState initState(Map<String, dynamic> args) {
-  return ProductPageState();
+  return ProductPageState()
+    ..productQuantity = 1
+    ..optionalMaterialSelected = false;
 }

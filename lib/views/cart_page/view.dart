@@ -8,6 +8,8 @@ import 'package:dosparkles/widgets/sparkles_drawer.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:cached_network_image/cached_network_image.dart';
+
 import 'action.dart';
 import 'state.dart';
 

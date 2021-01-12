@@ -50,6 +50,10 @@ class ProductItem {
 
   bool isActive;
 
+  String engraveExampleUrl;
+
+  String optionalMaterialExampleUrl;
+
   ProductItem.fromParams(
       {this.id,
       this.name,
@@ -73,7 +77,9 @@ class ProductItem {
       this.weight,
       this.uploadsAvailable,
       this.sizeOptionsAvailable,
-      this.isActive});
+      this.isActive,
+      this.engraveExampleUrl,
+      this.optionalMaterialExampleUrl});
 
   factory ProductItem(jsonStr) => jsonStr == null
       ? null
@@ -91,6 +97,15 @@ class ProductItem {
 
     videoUrl = jsonRes['video'] != null
         ? AppConfig.instance.baseApiHost + jsonRes['video']['url']
+        : null;
+
+    engraveExampleUrl = jsonRes['engraveExample'] != null
+        ? AppConfig.instance.baseApiHost + jsonRes['engraveExample']['url']
+        : null;
+
+    optionalMaterialExampleUrl = jsonRes['optionalMaterialExample'] != null
+        ? AppConfig.instance.baseApiHost +
+            jsonRes['optionalMaterialExample']['url']
         : null;
 
     oldPrice = checkDouble(jsonRes['oldPrice']);

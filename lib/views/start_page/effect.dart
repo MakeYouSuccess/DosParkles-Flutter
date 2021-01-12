@@ -32,7 +32,7 @@ Future _loadData() async {
   await UserInfoOperate.whenAppStart();
   await StoresInfoOperate.whenAppStart();
 
-  GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(new Map<ProductItem, int>()));
+  GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(new  List<CartItem>()));
 }
 
 void _onInit(Action action, Context<StartPageState> ctx) async {

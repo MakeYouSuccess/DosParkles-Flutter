@@ -37,7 +37,7 @@ class StoreSelectionPageState
   ProductItem selectedProduct;
 
  @override
-  Map<ProductItem, int> shoppingCart;
+   List<CartItem> shoppingCart;
 }
 
 StoreSelectionPageState initState(Map<String, dynamic> args) {

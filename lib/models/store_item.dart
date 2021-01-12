@@ -46,6 +46,8 @@ class StoreItem {
 
       for (var i = 0; i < jsonRes['products'].length; i++) {
         printWrapped('product: ${jsonRes['products'][i].toString()}');
+        if (jsonRes['products'][i]['isActive'] == null ||
+            jsonRes['products'][i]['isActive'] == false) continue;
         ProductItem _productItem =
             ModelFactory.generate<ProductItem>(jsonRes['products'][i]);
         _products.add(_productItem);

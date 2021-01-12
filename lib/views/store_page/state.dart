@@ -42,7 +42,7 @@ class StorePageState implements GlobalBaseState, Cloneable<StorePageState> {
   ProductItem selectedProduct;
 
   @override
-  Map<ProductItem, int> shoppingCart;
+   List<CartItem> shoppingCart;
 }
 
 StorePageState initState(Map<String, dynamic> args) {

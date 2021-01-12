@@ -2,6 +2,9 @@ import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
 import 'package:dosparkles/models/models.dart';
 
+import 'package:dosparkles/globalbasestate/store.dart';
+import 'package:dosparkles/globalbasestate/action.dart';
+
 import 'action.dart';
 import 'state.dart';
 
@@ -21,6 +24,9 @@ void _onInit(Action action, Context<ProductPageState> ctx) async {
   final Object ticker = ctx.stfState;
   ctx.state.animationController = AnimationController(
       vsync: ticker, duration: Duration(milliseconds: 2000));
+  // if (ctx.state.optionalMaterialSelected == null)
+  //   ctx.state.optionalMaterialSelected = false;
+  // if (ctx.state.productQuantity == null) ctx.state.productQuantity = 1;
 }
 
 void _onBuild(Action action, Context<ProductPageState> ctx) {
@@ -33,17 +39,16 @@ void _onDispose(Action action, Context<ProductPageState> ctx) {
 }
 
 void _onGoToCart(Action action, Context<ProductPageState> ctx) async {
-  //
   Navigator.of(ctx.context).pushReplacementNamed('cartpage');
 }
 
 void _onAddToCart(Action action, Context<ProductPageState> ctx) async {
   ProductItem product = action.payload[0];
   int count = action.payload[1];
-  // GlobalStore.store.dispatch(GlobalActionCreator.setSelectedProduct(product));
+
+  GlobalStore.store.dispatch(GlobalActionCreator.addProductToShoppingCart(product, count));
 
   Navigator.of(ctx.context).pushReplacementNamed('cartpage');
-  //
 }
 
 void _onBackToProduct(Action action, Context<ProductPageState> ctx) async {

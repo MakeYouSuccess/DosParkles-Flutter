@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart' hide Action;
 import 'package:dosparkles/models/models.dart';
@@ -16,6 +17,7 @@ Reducer<GlobalState> buildReducer() {
       GlobalAction.setSelectedStore: _setSelectedStore,
       GlobalAction.setSelectedProduct: _setSelectedProduct,
       GlobalAction.setShoppingCart: _setShoppingCart,
+      GlobalAction.addProductToShoppingCart: _addProductToShoppingCart,
     },
   );
 }
@@ -46,9 +48,20 @@ GlobalState _setSelectedProduct(GlobalState state, Action action) {
 }
 
 GlobalState _setShoppingCart(GlobalState state, Action action) {
-  final Map<ProductItem, int> cart = action.payload;
+  final List<CartItem> cart = action.payload;
   return state.clone()..shoppingCart = cart;
 }
 
+GlobalState _addProductToShoppingCart(GlobalState state, Action action) {
+  GlobalState newState = state.clone();
+  if (newState.shoppingCart == null) {
+    newState.shoppingCart = List.empty(growable: true);
+  }
 
+  newState.shoppingCart.add(CartItem.fromParams(
+      product: action.payload[0], count: action.payload[1]));
 
+  printWrapped('newState.shoppingCart ${newState.shoppingCart.toString()}');
+
+  return newState;
+}
