@@ -1,4 +1,4 @@
-package com.dosparkles.app
+package com.floridainc.dosparkles
 
 import io.flutter.embedding.android.FlutterActivity
 
