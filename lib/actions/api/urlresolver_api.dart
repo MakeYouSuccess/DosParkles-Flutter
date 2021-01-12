@@ -1,6 +1,6 @@
-import 'package:dosparkles/actions/app_config.dart';
-import 'package:dosparkles/actions/api/request.dart';
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/actions/api/request.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
 import 'dart:convert';
 
 class UrlResolverApi {

@@ -1,4 +1,4 @@
-import 'package:dosparkles/models/item.dart';
+import 'package:com.floridainc.dosparkles/models/item.dart';
 
 import 'dart:ui' as ui;
 

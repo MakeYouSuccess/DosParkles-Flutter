@@ -1,13 +1,13 @@
-import 'package:dosparkles/models/models.dart';
-import 'package:dosparkles/utils/general.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dosparkles/actions/adapt.dart';
-import 'package:dosparkles/style/themestyle.dart';
-import 'package:dosparkles/utils/colors.dart';
-import 'package:dosparkles/widgets/sparkles_drawer.dart';
+import 'package:com.floridainc.dosparkles/actions/adapt.dart';
+import 'package:com.floridainc.dosparkles/style/themestyle.dart';
+import 'package:com.floridainc.dosparkles/utils/colors.dart';
+import 'package:com.floridainc.dosparkles/widgets/sparkles_drawer.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';

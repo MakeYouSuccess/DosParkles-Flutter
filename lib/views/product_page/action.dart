@@ -1,6 +1,6 @@
 import 'package:fish_redux/fish_redux.dart';
 
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
 
 enum ProductPageAction {
   action,

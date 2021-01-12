@@ -1,8 +1,8 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
-import 'package:dosparkles/actions/adapt.dart';
-import 'package:dosparkles/widgets/keepalive_widget.dart';
-import 'package:dosparkles/utils/colors.dart';
+import 'package:com.floridainc.dosparkles/actions/adapt.dart';
+import 'package:com.floridainc.dosparkles/widgets/keepalive_widget.dart';
+import 'package:com.floridainc.dosparkles/utils/colors.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 

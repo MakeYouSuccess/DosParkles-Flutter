@@ -1,6 +1,6 @@
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:dosparkles/actions/app_config.dart';
-import 'package:dosparkles/actions/api/graphql_service.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/actions/api/graphql_service.dart';
 
 class BaseGraphQLClient {
   BaseGraphQLClient._();

@@ -1,4 +1,4 @@
-import 'package:dosparkles/actions/api/graphql_client.dart';
+import 'package:com.floridainc.dosparkles/actions/api/graphql_client.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
 // import 'package:google_sign_in/google_sign_in.dart';
@@ -8,7 +8,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'action.dart';
 import 'state.dart';
 import 'package:toast/toast.dart';
-import 'package:dosparkles/actions/user_info_operate.dart';
+import 'package:com.floridainc.dosparkles/actions/user_info_operate.dart';
 
 Effect<LoginPageState> buildEffect() {
   return combineEffects(<Object, Effect<LoginPageState>>{

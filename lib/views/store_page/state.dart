@@ -1,9 +1,9 @@
 import 'dart:ui';
-import 'package:dosparkles/utils/general.dart';
+import 'package:com.floridainc.dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart';
-import 'package:dosparkles/globalbasestate/state.dart';
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/state.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
 import 'package:flutter/material.dart';
 
 class StorePageState implements GlobalBaseState, Cloneable<StorePageState> {

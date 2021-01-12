@@ -1,9 +1,9 @@
-import 'package:dosparkles/globalbasestate/action.dart';
-import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/models/models.dart';
-import 'package:dosparkles/utils/general.dart';
-import 'package:dosparkles/actions/api/graphql_client.dart';
-import 'package:dosparkles/models/model_factory.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/action.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/store.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/utils/general.dart';
+import 'package:com.floridainc.dosparkles/actions/api/graphql_client.dart';
+import 'package:com.floridainc.dosparkles/models/model_factory.dart';
 
 class StoresInfoOperate {
   static Future whenAppStart() async {

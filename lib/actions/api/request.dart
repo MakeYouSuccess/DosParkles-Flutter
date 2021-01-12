@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:dio_http_cache/dio_http_cache.dart';
-import 'package:dosparkles/models/model_factory.dart';
-import 'package:dosparkles/models/response_model.dart';
+import 'package:com.floridainc.dosparkles/models/model_factory.dart';
+import 'package:com.floridainc.dosparkles/models/response_model.dart';
 
 class Request {
   final String baseurl;

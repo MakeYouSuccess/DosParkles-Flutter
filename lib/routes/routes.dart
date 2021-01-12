@@ -1,7 +1,7 @@
 import 'package:fish_redux/fish_redux.dart';
-import 'package:dosparkles/globalbasestate/state.dart';
-import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/views/views.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/state.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/store.dart';
+import 'package:com.floridainc.dosparkles/views/views.dart';
 
 class Routes {
   static final PageRoutes routes = PageRoutes(

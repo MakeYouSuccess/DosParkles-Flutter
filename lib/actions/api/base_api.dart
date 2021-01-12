@@ -1,4 +1,4 @@
-import 'package:dosparkles/actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
 import 'request.dart';
 
 class BaseApi {

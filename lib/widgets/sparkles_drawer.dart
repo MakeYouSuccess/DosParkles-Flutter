@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:dosparkles/actions/user_info_operate.dart';
-import 'package:dosparkles/utils/colors.dart';
+import 'package:com.floridainc.dosparkles/actions/user_info_operate.dart';
+import 'package:com.floridainc.dosparkles/utils/colors.dart';
 
 class SparklesDrawer extends StatelessWidget {
   @override

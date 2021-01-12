@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:dosparkles/utils/colors.dart';
+import 'package:com.floridainc.dosparkles/utils/colors.dart';
 
 class ThemeStyle {
   static final lightTheme = ThemeData.light().copyWith(

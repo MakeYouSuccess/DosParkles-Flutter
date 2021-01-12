@@ -4,17 +4,17 @@ import 'package:flutter/material.dart' hide Action;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'action.dart';
 import 'state.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'package:com.floridainc.dosparkles/models/models.dart';
 
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/store.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/action.dart';
 
-import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/globalbasestate/action.dart';
-
-import 'package:dosparkles/actions/user_info_operate.dart';
-import 'package:dosparkles/actions/stores_info_operate.dart';
+import 'package:com.floridainc.dosparkles/actions/user_info_operate.dart';
+import 'package:com.floridainc.dosparkles/actions/stores_info_operate.dart';
 
 Effect<StartPageState> buildEffect() {
   return combineEffects(<Object, Effect<StartPageState>>{
@@ -28,11 +28,13 @@ Effect<StartPageState> buildEffect() {
 
 void _onAction(Action action, Context<StartPageState> ctx) {}
 
-Future _loadData() async {
+Future _loadData(BuildContext context) async {
+  await AppConfig.instance.init(context);
   await UserInfoOperate.whenAppStart();
   await StoresInfoOperate.whenAppStart();
 
-  GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(new  List<CartItem>()));
+  GlobalStore.store
+      .dispatch(GlobalActionCreator.setShoppingCart(new List<CartItem>()));
 }
 
 void _onInit(Action action, Context<StartPageState> ctx) async {
@@ -41,7 +43,7 @@ void _onInit(Action action, Context<StartPageState> ctx) async {
 
   ctx.state.pageController = PageController();
 
-  await _loadData();
+  await _loadData(ctx.context);
 
   SharedPreferences.getInstance().then((_p) async {
     final _isFirst = _p.getBool('firstStart') ?? true;

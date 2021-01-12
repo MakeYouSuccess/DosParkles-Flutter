@@ -18,8 +18,8 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:dosparkles/routes/routes.dart';
-import 'actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/routes/routes.dart';
+// import 'actions/app_config.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 /// Define a top-level named handler which background/terminated messages will
@@ -99,7 +99,7 @@ class _AppState extends State<App> {
     if (Platform.isAndroid)
       await PermissionHandler().requestPermissions([PermissionGroup.storage]);
 
-    await AppConfig.instance.init(context);
+    // await AppConfig.instance.init(context);
   }
 
   @override

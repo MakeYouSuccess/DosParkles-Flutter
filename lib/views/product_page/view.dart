@@ -1,21 +1,21 @@
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:dosparkles/actions/adapt.dart';
-import 'package:dosparkles/style/themestyle.dart';
-import 'package:dosparkles/utils/colors.dart';
-import 'package:dosparkles/widgets/sparkles_drawer.dart';
+import 'package:com.floridainc.dosparkles/actions/adapt.dart';
+import 'package:com.floridainc.dosparkles/style/themestyle.dart';
+import 'package:com.floridainc.dosparkles/utils/colors.dart';
+import 'package:com.floridainc.dosparkles/widgets/sparkles_drawer.dart';
 
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
 
 import 'package:flutter_swiper/flutter_swiper.dart';
-import 'package:dosparkles/widgets/touch_spin.dart';
+import 'package:com.floridainc.dosparkles/widgets/touch_spin.dart';
 import 'package:intl/intl.dart';
 
 import 'package:cached_network_image/cached_network_image.dart';
 
-import 'package:dosparkles/utils/ensure_visible_when_focused.dart';
+import 'package:com.floridainc.dosparkles/utils/ensure_visible_when_focused.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -62,7 +62,7 @@ class _BackGround extends StatelessWidget {
 }
 
 class _AppBar extends StatelessWidget {
-  final  List<CartItem> shoppingCart;
+  final List<CartItem> shoppingCart;
   final Dispatch dispatch;
 
   const _AppBar({this.shoppingCart, this.dispatch});
@@ -199,7 +199,8 @@ class _MainBody extends StatelessWidget {
                   itemHeight: Adapt.screenW() * 0.6,
                   layout: SwiperLayout.STACK,
                   pagination: new SwiperPagination(
-                      margin: new EdgeInsets.only(top: 260),
+                      margin:
+                          new EdgeInsets.only(top: Adapt.screenW() * 0.6 + 20),
                       builder: new DotSwiperPaginationBuilder(
                           color: Colors.grey,
                           activeColor: HexColor('#3D9FB0'))),
@@ -828,7 +829,8 @@ class _ProductCustomization extends StatelessWidget {
                       padding: EdgeInsets.only(
                           top: 12.0, bottom: 12.0, left: 50, right: 50),
                       onPressed: () async {
-                        await dispatch(ProductPageActionCreator.onAddToCart(selectedProduct, productQuantity));
+                        await dispatch(ProductPageActionCreator.onAddToCart(
+                            selectedProduct, productQuantity));
                         dispatch(ProductPageActionCreator.onGoToCart());
                         // showDialog(
                         //     context: context,

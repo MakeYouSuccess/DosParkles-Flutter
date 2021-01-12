@@ -1,9 +1,9 @@
 import 'dart:convert' show json;
-import 'package:dosparkles/utils/general.dart';
+import 'package:com.floridainc.dosparkles/utils/general.dart';
 
 import 'product_item.dart';
 import 'model_factory.dart';
-import 'package:dosparkles/actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
 
 class StoreItem {
   String id;

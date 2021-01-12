@@ -1,5 +1,5 @@
 import 'dart:convert' show json;
-import 'package:dosparkles/actions/app_config.dart';
+import 'package:com.floridainc.dosparkles/actions/app_config.dart';
 
 class AppUser {
   String name;

@@ -1,9 +1,9 @@
-import 'package:dosparkles/models/models.dart';
+import 'package:com.floridainc.dosparkles/models/models.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
 
-import 'package:dosparkles/globalbasestate/store.dart';
-import 'package:dosparkles/globalbasestate/action.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/store.dart';
+import 'package:com.floridainc.dosparkles/globalbasestate/action.dart';
 
 import 'action.dart';
 import 'state.dart';
