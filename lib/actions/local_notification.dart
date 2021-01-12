@@ -32,7 +32,7 @@ class LocalNotification {
   Future sendNotification(String title, String body,
       {int id = 0, String payload = ''}) async {
     var androidPlatformChannelSpecifics = AndroidNotificationDetails(
-        '1128', 'flutterMovieNotification', 'for loacl Notification',
+        '1128', 'flutterNotification', 'for local Notification',
         importance: Importance.max, priority: Priority.high, ticker: 'ticker');
     var iOSPlatformChannelSpecifics =
         IOSNotificationDetails(presentAlert: true, presentBadge: true);

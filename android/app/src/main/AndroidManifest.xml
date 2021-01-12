@@ -16,7 +16,7 @@
         <!-- android:name=".App"  -->
    <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="MedDrive"
+        android:label="Do Sparkles"
         android:icon="@mipmap/ic_launcher">
           <!-- <meta-data android:name="com.google.android.gms.ads.APPLICATION_ID"
              android:value="ca-app-pub-8117211796129035~2073774357"/> -->
