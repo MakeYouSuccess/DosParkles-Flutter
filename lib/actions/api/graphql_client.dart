@@ -1,3 +1,4 @@
+import 'package:com.floridainc.dosparkles/utils/general.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:com.floridainc.dosparkles/actions/app_config.dart';
 import 'package:com.floridainc.dosparkles/actions/api/graphql_service.dart';
@@ -27,7 +28,7 @@ class BaseGraphQLClient {
 
   Future<QueryResult> loginWithEmail(String email, String password) {
     removeToken();
-    
+
     String _query = '''
     mutation {
       login(input: {
@@ -60,6 +61,7 @@ class BaseGraphQLClient {
           user {
             email
             username
+            shippingAddress
             role {
               id
               name
@@ -90,7 +92,7 @@ class BaseGraphQLClient {
           }
           products {
             id
-            shineonId
+            shineonImportId
             thumbnail {
               url
             }
@@ -108,6 +110,7 @@ class BaseGraphQLClient {
             showOldPrice
             engraveAvailable
             properties
+            shineonIds
             engraveOldPrice
             engravePrice
             showOldEngravePrice
@@ -120,7 +123,6 @@ class BaseGraphQLClient {
             }
             deliveryInformation
             name
-            weight
             uploadsAvailable
             sizeOptionsAvailable
             isActive
@@ -130,6 +132,40 @@ class BaseGraphQLClient {
     ''';
 
     return _service.query(_query);
+  }
+
+  Future<QueryResult> createOrder(
+      String orderDetailsJson, double totalPrice, String productsIdsJson) {
+    String _mutation = '''
+    mutation CreateCustomer {
+      createOrder(
+        input: {
+          data:{
+          orderDetails: $orderDetailsJson,
+          totalPrice: $totalPrice,
+          products: $productsIdsJson
+          }
+        }
+      ) 
+      {
+        order {
+          id
+          orderDetails
+          status
+          refunded
+          totalPrice
+          products {
+            id
+          }
+          shipmentDetails
+          shineonId
+          cancelReason
+        }
+      }
+    }
+    ''';
+    printWrapped('Debug _mutation: $_mutation');
+    return _service.query(_mutation);
   }
 
   // Stream<FetchResult> tvShowCommentSubscription(int id) {

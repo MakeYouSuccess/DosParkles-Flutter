@@ -8,7 +8,7 @@ class ProductItem {
 
   String name;
 
-  String shineonId;
+  String shineonImportId;
 
   String thumbnailUrl;
 
@@ -23,6 +23,8 @@ class ProductItem {
   bool engraveAvailable;
 
   dynamic properties;
+
+  dynamic shineonIds;
 
   double engraveOldPrice;
 
@@ -42,8 +44,6 @@ class ProductItem {
 
   String deliveryInformation;
 
-  double weight;
-
   bool uploadsAvailable;
 
   bool sizeOptionsAvailable;
@@ -57,7 +57,7 @@ class ProductItem {
   ProductItem.fromParams(
       {this.id,
       this.name,
-      this.shineonId,
+      this.shineonImportId,
       this.thumbnailUrl,
       this.videoUrl,
       this.oldPrice,
@@ -74,7 +74,6 @@ class ProductItem {
       this.optionalFinishMaterialEnabled,
       this.mediaUrls,
       this.deliveryInformation,
-      this.weight,
       this.uploadsAvailable,
       this.sizeOptionsAvailable,
       this.isActive,
@@ -88,9 +87,9 @@ class ProductItem {
           : new ProductItem.fromJson(jsonStr);
 
   ProductItem.fromJson(jsonRes) {
-    id = jsonRes['id'];
+    id = jsonRes['id'] != null ? jsonRes['id'] : jsonRes['_id'];
     name = jsonRes['name'];
-    shineonId = jsonRes['shineonId'];
+    shineonImportId = jsonRes['shineonImportId'];
     thumbnailUrl = jsonRes['thumbnail'] != null
         ? AppConfig.instance.baseApiHost + jsonRes['thumbnail']['url']
         : null;
@@ -114,6 +113,7 @@ class ProductItem {
     engraveAvailable = jsonRes['engraveAvailable'];
 
     properties = jsonRes['properties'];
+    shineonIds = jsonRes['shineonIds'];
 
     engraveOldPrice = checkDouble(jsonRes['engraveOldPrice']);
     engravePrice = checkDouble(jsonRes['engravePrice']);
@@ -136,7 +136,6 @@ class ProductItem {
     }
 
     deliveryInformation = jsonRes['deliveryInformation'];
-    weight = checkDouble(jsonRes['weight']);
     uploadsAvailable = jsonRes['uploadsAvailable'];
     sizeOptionsAvailable = jsonRes['sizeOptionsAvailable'];
     isActive = jsonRes['isActive'];

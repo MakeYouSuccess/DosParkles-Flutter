@@ -29,7 +29,7 @@ class ProductPageActionCreator {
     return const Action(ProductPageAction.backToProduct);
   }
 
-  static Action onSetEngravingInputs(dynamic inputs) {
+  static Action onSetEngravingInputs(List<String> inputs) {
     return Action(ProductPageAction.setEngravingInputs, payload: inputs);
   }
 

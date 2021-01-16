@@ -33,7 +33,7 @@ class StoreItem {
           : new StoreItem.fromJson(jsonStr);
 
   StoreItem.fromJson(jsonRes) {
-    id = jsonRes['id'];
+    id = jsonRes['id'] != null ? jsonRes['id'] : jsonRes['_id'];
     name = jsonRes['name'];
     address = jsonRes['address'];
     phone = jsonRes['phone'];

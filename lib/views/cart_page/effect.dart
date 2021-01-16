@@ -1,9 +1,12 @@
 import 'package:com.floridainc.dosparkles/models/cart_item_model.dart';
+import 'package:com.floridainc.dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
 import 'package:flutter/widgets.dart' hide Action;
 
 import 'package:com.floridainc.dosparkles/globalbasestate/store.dart';
 import 'package:com.floridainc.dosparkles/globalbasestate/action.dart';
+
+import 'package:com.floridainc.dosparkles/actions/api/graphql_client.dart';
 
 import 'action.dart';
 import 'state.dart';
@@ -78,7 +81,86 @@ void _onRemoveCartItem(Action action, Context<CartPageState> ctx) {
   }
 }
 
-void _onProceedToCheckout(Action action, Context<CartPageState> ctx) {
+String processCartItemForOrder(CartItem item) {
+  String sku;
+  String properties;
+
+  // TODO: "print_url": "http://lorempixel.com/100/100/",
+
+  bool hasEngraving = false;
+
+  if (item.product.engraveAvailable) {
+    var empty = true;
+    if (item.engraveInputs != null)
+      for (var i = 0; i < item.engraveInputs.length; i++) {
+        if (item.engraveInputs[i].trim().length > 0) {
+          empty = false;
+          break;
+        }
+      }
+    if (!empty) {
+      hasEngraving = true;
+    }
+  }
+
+  if (!hasEngraving && !item.optionalMaterialSelected) {
+    sku = item.product.shineonIds['simple'];
+  } else if (!hasEngraving && item.optionalMaterialSelected) {
+    sku = item.product.shineonIds['withMaterial'];
+  } else if (hasEngraving && !item.optionalMaterialSelected) {
+    sku = item.product.shineonIds['withEngraving'];
+  } else if (hasEngraving && item.optionalMaterialSelected) {
+    sku = item.product.shineonIds['withEngravingAndMaterial'];
+  }
+
+  properties = '{ Engraving_Font: "Tangerine"';
+
+  if (hasEngraving) {
+    for (var i = 0; i < item.engraveInputs.length; i++) {
+      properties += ', Engraving_Line_${i + 1}: "${item.engraveInputs[i]}"';
+    }
+  }
+
+  properties += ' }';
+
+  var result =
+      '{ store_line_item_id: "${item.product.id}", sku: "$sku", quantity: ${item.count}, properties: $properties }';
+  printWrapped('processCartItemForOrder: $result');
+
+  return result;
+}
+
+void _onProceedToCheckout(Action action, Context<CartPageState> ctx) async {
+  List<CartItem> cart = ctx.state.shoppingCart;
+  if (cart == null || cart.length == 0) return;
+
+  String orderDetailsJson;
+  double totalPrice = 0;
+  String productsIdsJson;
+
+  orderDetailsJson =
+      "[${cart.map((item) => processCartItemForOrder(item)).join(',')}]";
+
+  for (var i = 0; i < cart.length; i++) {
+    totalPrice += cart[i].amount;
+  }
+
+  productsIdsJson = "[${cart.map((item) => '"${item.product.id}"').join(',')}]";
+
+  printWrapped('orderDetailsJson: $orderDetailsJson');
+  printWrapped('productsIdsJson: $productsIdsJson');
+
+  var result = await BaseGraphQLClient.instance
+      .createOrder(orderDetailsJson, totalPrice, productsIdsJson);
+  if (result.hasException) {
+    printWrapped('Exception: ${result.exception}');
+  }
+
+  return;
+
+  GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(
+      List<CartItem>.empty(growable: true)));
+
   Navigator.of(ctx.context)
       .pushReplacementNamed('storepage', arguments: {'listView': true});
 }

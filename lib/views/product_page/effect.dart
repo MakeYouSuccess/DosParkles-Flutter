@@ -24,9 +24,6 @@ void _onInit(Action action, Context<ProductPageState> ctx) async {
   final Object ticker = ctx.stfState;
   ctx.state.animationController = AnimationController(
       vsync: ticker, duration: Duration(milliseconds: 2000));
-  // if (ctx.state.optionalMaterialSelected == null)
-  //   ctx.state.optionalMaterialSelected = false;
-  // if (ctx.state.productQuantity == null) ctx.state.productQuantity = 1;
 }
 
 void _onBuild(Action action, Context<ProductPageState> ctx) {
@@ -39,14 +36,36 @@ void _onDispose(Action action, Context<ProductPageState> ctx) {
 }
 
 void _onGoToCart(Action action, Context<ProductPageState> ctx) async {
-  Navigator.of(ctx.context).pushReplacementNamed('cartpage');
+  if (ctx.state.shoppingCart.length > 0)
+    Navigator.of(ctx.context).pushReplacementNamed('cartpage');
 }
 
 void _onAddToCart(Action action, Context<ProductPageState> ctx) async {
   ProductItem product = action.payload[0];
   int count = action.payload[1];
 
-  GlobalStore.store.dispatch(GlobalActionCreator.addProductToShoppingCart(product, count));
+  double amount = product.price;
+  if (ctx.state.optionalMaterialSelected) {
+    amount += ctx.state.selectedProduct.optionalFinishMaterialPrice;
+  }
+
+  if (ctx.state.selectedProduct.engraveAvailable) {
+    var empty = true;
+    if (ctx.state.engraveInputs != null)
+      for (var i = 0; i < ctx.state.engraveInputs.length; i++) {
+        if (ctx.state.engraveInputs[i].trim().length > 0) {
+          empty = false;
+          break;
+        }
+      }
+    if (!empty) {
+      amount += ctx.state.selectedProduct.engravePrice;
+    }
+  }
+  amount *= count;
+
+  GlobalStore.store.dispatch(
+      GlobalActionCreator.addProductToShoppingCart(product, count, amount, ctx.state.engraveInputs, ctx.state.optionalMaterialSelected));
 
   Navigator.of(ctx.context).pushReplacementNamed('cartpage');
 }

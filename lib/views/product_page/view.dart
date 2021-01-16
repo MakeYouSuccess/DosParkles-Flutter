@@ -34,6 +34,7 @@ Widget buildView(
           dispatch: dispatch,
           selectedProduct: state.selectedProduct,
           optionalMaterialSelected: state.optionalMaterialSelected,
+          engraveInputs: state.engraveInputs,
           productQuantity: state.productQuantity,
         ),
       ],
@@ -103,7 +104,6 @@ class _AppBar extends StatelessWidget {
                         Icons.shopping_cart,
                         color: Colors.white,
                       ),
-                      onPressed: null,
                     ),
                     shoppingCart.length == 0
                         ? new Container()
@@ -141,6 +141,7 @@ class _MainBody extends StatelessWidget {
   final AnimationController animationController;
   final ProductItem selectedProduct;
   final bool optionalMaterialSelected;
+  final List<String> engraveInputs;
   final int productQuantity;
 
   _MainBody(
@@ -148,6 +149,7 @@ class _MainBody extends StatelessWidget {
       this.dispatch,
       this.selectedProduct,
       this.optionalMaterialSelected,
+      this.engraveInputs,
       this.productQuantity});
 
   @override
@@ -161,7 +163,10 @@ class _MainBody extends StatelessWidget {
       ),
     );
 
-    print('_MainBody optionalMaterialSelected: $optionalMaterialSelected');
+    // print('_MainBody optionalMaterialSelected: $optionalMaterialSelected');
+    // print(
+    //     'selectedProduct.price: ${selectedProduct.price} productQuantity: ${productQuantity}');
+    // print('popup: $optionalMaterialSelected');
 
     int _productQuantity = productQuantity == null ? 1 : productQuantity;
 
@@ -301,16 +306,22 @@ class _MainBody extends StatelessWidget {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) {
-                          return _ProductCustomization(
-                              dispatch: dispatch,
-                              selectedProduct: selectedProduct,
-                              productQuantity: productQuantity,
-                              optionalMaterialSelected:
-                                  optionalMaterialSelected);
+                          return StatefulBuilder(
+                            builder: (context, setState) {
+                              return _ProductCustomization(
+                                  dispatch: dispatch,
+                                  selectedProduct: selectedProduct,
+                                  productQuantity: productQuantity,
+                                  engraveInputs: engraveInputs,
+                                  optionalMaterialSelected:
+                                      optionalMaterialSelected);
+                            },
+                          );
                         });
                   },
                   child: Text(
-                    '\$${selectedProduct.price} - Add to Cart'.toUpperCase(),
+                    '\$${selectedProduct.price * productQuantity} - Add to Cart'
+                        .toUpperCase(),
                     style: TextStyle(
                       fontSize: 16.0,
                     ),
@@ -406,23 +417,49 @@ class _MainBody extends StatelessWidget {
   }
 }
 
-class _ProductCustomization extends StatelessWidget {
+class _ProductCustomization extends StatefulWidget {
   final Dispatch dispatch;
   final ProductItem selectedProduct;
   final int productQuantity;
   final bool optionalMaterialSelected;
-  bool _optionalMaterialSelected;
+  final List<String> engraveInputs;
 
   _ProductCustomization(
       {this.dispatch,
       this.selectedProduct,
       this.productQuantity,
+      this.engraveInputs,
       this.optionalMaterialSelected});
+
+  @override
+  _ProductCustomizationState createState() => new _ProductCustomizationState(
+      dispatch: dispatch,
+      selectedProduct: selectedProduct,
+      productQuantity: productQuantity,
+      engraveInputs: engraveInputs,
+      optionalMaterialSelected: optionalMaterialSelected);
+}
+
+class _ProductCustomizationState extends State<_ProductCustomization> {
+  Dispatch dispatch;
+  ProductItem selectedProduct;
+  int productQuantity;
+  bool optionalMaterialSelected;
+  List<String> engraveInputs;
+
+  List<TextEditingController> engravingControllers;
+
+  _ProductCustomizationState(
+      {this.dispatch,
+      this.selectedProduct,
+      this.productQuantity,
+      this.engraveInputs,
+      this.optionalMaterialSelected});
+
   @override
   Widget build(BuildContext context) {
     print(
         '_ProductCustomization optionalMaterialSelected: $optionalMaterialSelected');
-    _optionalMaterialSelected = optionalMaterialSelected;
 
     return AlertDialog(
       scrollable: true,
@@ -433,6 +470,32 @@ class _ProductCustomization extends StatelessWidget {
           // Get available height and width of the build area of this widget. Make a choice depending on the size.
           var height = MediaQuery.of(context).size.height;
           var width = MediaQuery.of(context).size.width;
+
+          int engravingsCount = 0;
+
+          if (selectedProduct != null &&
+              selectedProduct.properties != null &&
+              selectedProduct.properties['engravings'] != null) {
+            var engravings = selectedProduct.properties['engravings'];
+            if (engravings is int) {
+              engravingsCount = engravings;
+            } else {
+              engravingsCount = int.tryParse(engravings) ?? 0;
+            }
+          }
+
+          if (engravingsCount > 0) {
+            engravingControllers = List.empty(growable: true);
+            for (var i = 0; i < engravingsCount; i++) {
+              var controller = TextEditingController();
+              if (engraveInputs != null && engraveInputs.length > i) {
+                controller..text = engraveInputs[i];
+              }
+              engravingControllers.add(controller);
+            }
+          }
+
+          print('engravingsCount: $engravingsCount');
 
           return Container(
             // height: height - 200,
@@ -582,7 +645,7 @@ class _ProductCustomization extends StatelessWidget {
                           )
                         : Container(),
                     //
-                    selectedProduct.engraveAvailable
+                    selectedProduct.engraveAvailable && engravingsCount > 0
                         ? Column(
                             children: [
                               SizedBox(
@@ -666,11 +729,60 @@ class _ProductCustomization extends StatelessWidget {
                                           ),
                                         )
                                       : Container(),
-                                  // TextField(
-                                  //   decoration: InputDecoration(
-                                  //       border: InputBorder.none,
-                                  //       hintText: 'Enter a search term'),
-                                  // )
+                                  Container(
+                                    margin: EdgeInsets.symmetric(vertical: 8.0),
+                                    width: Adapt.screenW() - 250,
+                                    height: 60.0 * engravingsCount,
+                                    child: ListView.builder(
+                                      itemCount: engravingsCount,
+                                      itemBuilder: (context, index) {
+                                        return Padding(
+                                          padding: EdgeInsets.all(5),
+                                          child: TextField(
+                                            maxLength: 16,
+                                            controller:
+                                                engravingControllers[index],
+                                            onChanged: (content) {
+                                              var engravingListActual =
+                                                  List<String>.empty(
+                                                      growable: true);
+                                              for (var i = 0;
+                                                  i <
+                                                      engravingControllers
+                                                          .length;
+                                                  i++) {
+                                                engravingListActual.add(
+                                                    engravingControllers[i]
+                                                        .text);
+                                              }
+                                              dispatch(ProductPageActionCreator
+                                                  .onSetEngravingInputs(
+                                                      engravingListActual));
+                                            },
+                                            textAlign: TextAlign.center,
+                                            keyboardType: TextInputType.text,
+                                            decoration: InputDecoration(
+                                              counterText: '',
+                                              hintText: 'Your Words Here',
+                                              hintStyle:
+                                                  TextStyle(fontSize: 16),
+                                              border: OutlineInputBorder(
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                borderSide: BorderSide(
+                                                    width: 1.0,
+                                                    color: Colors.black),
+                                              ),
+                                              filled: true,
+                                              contentPadding:
+                                                  EdgeInsets.all(16),
+                                              fillColor: Colors.white,
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -724,14 +836,6 @@ class _ProductCustomization extends StatelessWidget {
                                             fontSize: 18,
                                             fontWeight: FontWeight.normal,
                                           )),
-                                      // TextSpan(
-                                      //   text: '\$${selectedProduct.price} ',
-                                      //   style: TextStyle(
-                                      //     color: Colors.red,
-                                      //     fontSize: 18,
-                                      //     fontWeight: FontWeight.normal,
-                                      //   ),
-                                      // ),
                                       TextSpan(
                                         text: ')',
                                         style: TextStyle(
@@ -761,62 +865,62 @@ class _ProductCustomization extends StatelessWidget {
                                           ),
                                         )
                                       : Container(),
-                                  Column(
-                                    children: [
-                                      // Text(
-                                      //     '$_optionalMaterialSelected $productQuantity'),
-                                      Text(
-                                        'Add ${selectedProduct.optionalFinishMaterial}',
-                                        style: TextStyle(
-                                          color: Colors.black,
-                                          fontSize: 16,
-                                          fontWeight: FontWeight.bold,
+                                  InkWell(
+                                    onTap: () {
+                                      print(
+                                          'optionalMaterialSelected: $optionalMaterialSelected !optionalMaterialSelected: ${!optionalMaterialSelected}');
+                                      dispatch(ProductPageActionCreator
+                                          .onSetOptionMaterialSelected(
+                                              !optionalMaterialSelected));
+
+                                      var engravingListActual =
+                                          List<String>.empty(growable: true);
+                                      for (var i = 0;
+                                          i < engravingControllers.length;
+                                          i++) {
+                                        engravingListActual
+                                            .add(engravingControllers[i].text);
+                                      }
+                                      setState(() {
+                                        optionalMaterialSelected =
+                                            !optionalMaterialSelected;
+                                        engraveInputs = engravingListActual;
+                                      });
+                                    },
+                                    child: Column(
+                                      children: [
+                                        Text(
+                                          'Add ${selectedProduct.optionalFinishMaterial}',
+                                          style: TextStyle(
+                                            color: Colors.black,
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                         ),
-                                      ),
-                                      IconButton(
-                                        iconSize: 30.0,
-                                        padding: EdgeInsets.only(
-                                            left: 4, right: 4, top: 0),
-                                        icon: InkWell(
-                                          child: _optionalMaterialSelected ==
-                                                  true
-                                              ? Icon(Icons.check_circle_outline,
-                                                  color: HexColor('#15CCF4'))
-                                              : Icon(
-                                                  Icons.check_circle_outline,
-                                                  color: Colors.grey,
-                                                ),
-                                          onTap: () {
-                                            print(
-                                                'optionalMaterialSelected: $optionalMaterialSelected !optionalMaterialSelected ${!optionalMaterialSelected}');
-                                            dispatch(ProductPageActionCreator
-                                                .onSetOptionMaterialSelected(
-                                                    !_optionalMaterialSelected));
-                                            _optionalMaterialSelected =
-                                                !_optionalMaterialSelected;
-                                          },
+                                        SizedBox(
+                                          height: 10,
                                         ),
-                                        // onPressed: () {
-                                        //   print(
-                                        //       'onSetOptionMaterialSelected');
-                                        //   dispatch(ProductPageActionCreator
-                                        //       .onSetOptionMaterialSelected(
-                                        //           !optionalMaterialSelected));
-                                        // },
-                                      ),
-                                    ],
-                                  )
-                                  // TextField(
-                                  //   decoration: InputDecoration(
-                                  //       border: InputBorder.none,
-                                  //       hintText: 'Enter a search term'),
-                                  // )
+                                        Container(
+                                          width: 30,
+                                          height: 30,
+                                          decoration: BoxDecoration(
+                                            image: DecorationImage(
+                                                image: AssetImage(
+                                                    optionalMaterialSelected ==
+                                                            true
+                                                        ? "images/checkblue.png"
+                                                        : "images/checkgrey.png"),
+                                                fit: BoxFit.contain),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
                           )
                         : Container(),
-
                     SizedBox(
                       height: 20,
                     ),
@@ -832,14 +936,6 @@ class _ProductCustomization extends StatelessWidget {
                         await dispatch(ProductPageActionCreator.onAddToCart(
                             selectedProduct, productQuantity));
                         dispatch(ProductPageActionCreator.onGoToCart());
-                        // showDialog(
-                        //     context: context,
-                        //     builder: (BuildContext context) {
-                        //       return _ProductCustomization(
-                        //           dispatch: dispatch,
-                        //           selectedProduct: selectedProduct,
-                        //           productQuantity: productQuantity);
-                        //     });
                       },
                       child: Text(
                         'Customize and Proceed',

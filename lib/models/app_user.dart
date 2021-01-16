@@ -10,7 +10,14 @@ class AppUser {
 
   String avatarUrl;
 
-  AppUser.fromParams({this.name, this.email, this.country, this.avatarUrl});
+  dynamic shippingAddress;
+
+  AppUser.fromParams(
+      {this.name,
+      this.email,
+      this.country,
+      this.avatarUrl,
+      this.shippingAddress});
 
   factory AppUser(jsonStr) => jsonStr == null
       ? null
@@ -22,11 +29,14 @@ class AppUser {
     name = jsonRes['name'];
     email = jsonRes['email'];
     country = jsonRes['country'];
+    shippingAddress = jsonRes['shippingAddress'];
 
-    avatarUrl = jsonRes['avatar'] != null ? AppConfig.instance.baseApiHost + jsonRes['avatar']['url'] : null;
+    avatarUrl = jsonRes['avatar'] != null
+        ? AppConfig.instance.baseApiHost + jsonRes['avatar']['url']
+        : null;
   }
   @override
   String toString() {
-    return '{"name": "$name","email": ${email != null ? '${json.encode(email)}' : 'null'}}';
+    return '{"name": "$name","email": ${email != null ? '${json.encode(email)}' : 'null'}, "shippingAddress": $shippingAddress}';
   }
 }

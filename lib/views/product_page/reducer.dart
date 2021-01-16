@@ -24,7 +24,7 @@ ProductPageState _onAction(ProductPageState state, Action action) {
 ProductPageState _onSetOptionMaterialSelected(
     ProductPageState state, Action action) {
   final ProductPageState newState = state.clone();
-  print('action.payload ${action.payload}');
+  print('_onSetOptionMaterialSelected ${action.payload}');
   newState.optionalMaterialSelected = action.payload;
   return newState;
 }

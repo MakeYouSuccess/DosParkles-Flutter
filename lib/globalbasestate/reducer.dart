@@ -61,7 +61,9 @@ GlobalState _addProductToShoppingCart(GlobalState state, Action action) {
   newState.shoppingCart.add(CartItem.fromParams(
       product: action.payload[0],
       count: action.payload[1],
-      amount: action.payload[2]));
+      amount: action.payload[2],
+      engraveInputs: action.payload[3],
+      optionalMaterialSelected: action.payload[4]));
 
   printWrapped('newState.shoppingCart ${newState.shoppingCart.toString()}');
 

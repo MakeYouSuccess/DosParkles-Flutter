@@ -7,13 +7,15 @@ import 'package:com.floridainc.dosparkles/utils/general.dart';
 class CartItem {
   ProductItem product;
   int count;
-  dynamic engraveInputs;
+  List<String> engraveInputs;
   double amount;
+  bool optionalMaterialSelected;
 
-  CartItem.fromParams({this.product, this.count, this.engraveInputs, this.amount});
+  CartItem.fromParams(
+      {this.product, this.count, this.engraveInputs, this.amount, this.optionalMaterialSelected});
 
   @override
   String toString() {
-    return '${product.toString()} count: $count amount: $amount';
+    return '${product.toString()} count: $count amount: $amount engraveInputs: $engraveInputs';
   }
 }

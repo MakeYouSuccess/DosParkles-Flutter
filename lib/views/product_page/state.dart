@@ -6,7 +6,7 @@ import 'package:com.floridainc.dosparkles/models/models.dart';
 
 class ProductPageState implements GlobalBaseState, Cloneable<ProductPageState> {
   AnimationController animationController;
-  dynamic engraveInputs;
+  List<String> engraveInputs;
   bool optionalMaterialSelected;
   int productQuantity;
 
@@ -42,10 +42,11 @@ class ProductPageState implements GlobalBaseState, Cloneable<ProductPageState> {
   ProductItem selectedProduct;
 
   @override
-   List<CartItem> shoppingCart;
+  List<CartItem> shoppingCart;
 }
 
 ProductPageState initState(Map<String, dynamic> args) {
+  print('initState');
   return ProductPageState()
     ..productQuantity = 1
     ..optionalMaterialSelected = false;
