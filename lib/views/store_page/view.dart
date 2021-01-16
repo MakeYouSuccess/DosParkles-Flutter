@@ -41,10 +41,12 @@ Widget buildView(
                   )),
       ],
     ),
-    appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(60),
-        child: _AppBar(title: state.selectedStore.name)),
-    drawer: SparklesDrawer(),
+    appBar: state.listView
+        ? PreferredSize(
+            preferredSize: const Size.fromHeight(60),
+            child: _AppBar(title: state.selectedStore.name))
+        : null,
+    drawer: state.listView ? SparklesDrawer() : null,
   );
 }
 
@@ -221,7 +223,8 @@ class _ProductViewState extends State<_ProductView>
       onHorizontalDragEnd: (dragEndDetails) {
         if (dragEndDetails.primaryVelocity < 0) {
           // Page forwards
-          widget.dispatch(StorePageActionCreator.onGoToProductPage(widget.store.products[_tabSelectedIndex]));
+          widget.dispatch(StorePageActionCreator.onGoToProductPage(
+              widget.store.products[_tabSelectedIndex]));
         } else if (dragEndDetails.primaryVelocity > 0) {
           // Page backwards
           widget.dispatch(StorePageActionCreator.onBackToAllProducts());
@@ -289,15 +292,15 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
     _videoController.dispose();
   }
 
-  Widget isPlaying() {
-    return _videoController.value.isPlaying && !isShowPlaying
-        ? Container()
-        : Icon(
-            Icons.play_arrow,
-            size: 80,
-            color: Colors.white.withOpacity(0.5),
-          );
-  }
+  // Widget isPlaying() {
+  //   return _videoController.value.isPlaying && !isShowPlaying
+  //       ? Container()
+  //       : Icon(
+  //           Icons.play_arrow,
+  //           size: 80,
+  //           color: Colors.white.withOpacity(0.5),
+  //         );
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -332,12 +335,12 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
                             ),
                           ),
                         ),
-                        Center(
-                          child: Container(
-                            decoration: BoxDecoration(),
-                            child: isPlaying(),
-                          ),
-                        )
+                        // Center(
+                        //   child: Container(
+                        //     decoration: BoxDecoration(),
+                        //     child: isPlaying(),
+                        //   ),
+                        // )
                       ],
                     ),
                   ),

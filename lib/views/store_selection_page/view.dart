@@ -92,9 +92,11 @@ class _MainBody extends StatelessWidget {
 
     return Center(
       child: SlideTransition(
-          position:
-              Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
-          child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+        position:
+            Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
             Flexible(
               child: CustomScrollView(
                 center: centerKey,
@@ -115,9 +117,8 @@ class _MainBody extends StatelessWidget {
                               child: Text('Store: ${stores[index].name}'),
                             ),
                             onTap: () => {
-                              dispatch(
-                                  StoreSelectionPageActionCreator.onStoreSelected(
-                                      stores[index])),
+                              dispatch(StoreSelectionPageActionCreator
+                                  .onStoreSelected(stores[index])),
                             },
                           ),
                         );
@@ -128,7 +129,9 @@ class _MainBody extends StatelessWidget {
                 ],
               ),
             ),
-          ])),
+          ],
+        ),
+      ),
     );
   }
 }

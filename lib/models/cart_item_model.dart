@@ -5,17 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:com.floridainc.dosparkles/utils/general.dart';
 
 class CartItem {
- ProductItem product;
- int count;
- dynamic engraveInputs;
+  ProductItem product;
+  int count;
+  dynamic engraveInputs;
+  double amount;
 
-  CartItem.fromParams(
-      {this.product,
-      this.count,
-      this.engraveInputs});
+  CartItem.fromParams({this.product, this.count, this.engraveInputs, this.amount});
 
   @override
   String toString() {
-    return '${product.toString()} count: $count';
+    return '${product.toString()} count: $count amount: $amount';
   }
 }
