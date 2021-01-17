@@ -94,42 +94,49 @@ class _MainBody extends StatelessWidget {
       child: SlideTransition(
         position:
             Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: [
-            Flexible(
-              child: CustomScrollView(
-                center: centerKey,
-                scrollDirection: Axis.vertical,
-                slivers: <Widget>[
-                  SliverList(
-                    key: centerKey,
-                    delegate: SliverChildBuilderDelegate(
-                      (BuildContext context, int index) {
-                        return Padding(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 2.0, vertical: 2.0),
-                          child: InkWell(
-                            child: Container(
-                              alignment: Alignment.center,
-                              color: Colors.grey,
-                              height: 100,
-                              child: Text('Store: ${stores[index].name}'),
-                            ),
-                            onTap: () => {
-                              dispatch(StoreSelectionPageActionCreator
-                                  .onStoreSelected(stores[index])),
+        child: Container(
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: Adapt.screenH()),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(
+                    child: CustomScrollView(
+                      center: centerKey,
+                      scrollDirection: Axis.vertical,
+                      slivers: <Widget>[
+                        SliverList(
+                          key: centerKey,
+                          delegate: SliverChildBuilderDelegate(
+                            (BuildContext context, int index) {
+                              return Padding(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 2.0, vertical: 2.0),
+                                child: InkWell(
+                                  child: Container(
+                                    alignment: Alignment.center,
+                                    color: Colors.grey,
+                                    height: 100,
+                                    child: Text('Store: ${stores[index].name}'),
+                                  ),
+                                  onTap: () => {
+                                    dispatch(StoreSelectionPageActionCreator
+                                        .onStoreSelected(stores[index])),
+                                  },
+                                ),
+                              );
                             },
+                            childCount: stores.length,
                           ),
-                        );
-                      },
-                      childCount: stores.length,
+                        ),
+                      ],
                     ),
                   ),
                 ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

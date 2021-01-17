@@ -114,54 +114,59 @@ class _ListView extends StatelessWidget {
             Tween(begin: Offset(0, 1), end: Offset.zero).animate(cardCurve),
         child: Container(
           color: HexColor('#dfdada'),
-          child: CustomScrollView(slivers: <Widget>[
-            SliverGrid(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 11.0,
-                crossAxisSpacing: 11.0,
-                childAspectRatio: 0.8,
-              ),
-              delegate: SliverChildBuilderDelegate(
-                (BuildContext context, int index) {
-                  return InkWell(
-                      child: Container(
-                        color: HexColor('#dfdada'),
-                        child: Stack(children: <Widget>[
-                          Column(
-                              crossAxisAlignment: CrossAxisAlignment.stretch,
-                              children: <Widget>[
-                                new Expanded(
-                                  child: new CachedNetworkImage(
-                                    imageUrl:
-                                        store.products[index].thumbnailUrl,
+          child: SingleChildScrollView(
+            child: ConstrainedBox(
+              constraints: BoxConstraints(maxHeight: Adapt.screenH()),
+              child: CustomScrollView(slivers: <Widget>[
+                SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    mainAxisSpacing: 11.0,
+                    crossAxisSpacing: 11.0,
+                    childAspectRatio: 0.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    (BuildContext context, int index) {
+                      return InkWell(
+                          child: Container(
+                            color: HexColor('#dfdada'),
+                            child: Stack(children: <Widget>[
+                              Column(
+                                  crossAxisAlignment:
+                                      CrossAxisAlignment.stretch,
+                                  children: <Widget>[
+                                    new Expanded(
+                                      child: new CachedNetworkImage(
+                                        imageUrl:
+                                            store.products[index].thumbnailUrl,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    ),
+                                  ]),
+                              Center(
+                                child: Container(
+                                  width: 37,
+                                  height: 54,
+                                  decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                    image: AssetImage("images/play.png"),
                                     fit: BoxFit.cover,
-                                  ),
+                                  )),
                                 ),
-                              ]),
-                          Center(
-                            child: Container(
-                              width: 37,
-                              height: 54,
-                              decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                image: AssetImage("images/play.png"),
-                                fit: BoxFit.cover,
-                              )),
-                            ),
+                              ),
+                            ]),
                           ),
-                        ]),
-                      ),
-                      onTap: () => {
-                            dispatch(
-                                StorePageActionCreator.onProductIndexSelected(
-                                    index)),
-                          });
-                },
-                childCount: store.products.length,
-              ),
-            )
-          ]),
+                          onTap: () => {
+                                dispatch(StorePageActionCreator
+                                    .onProductIndexSelected(index)),
+                              });
+                    },
+                    childCount: store.products.length,
+                  ),
+                )
+              ]),
+            ),
+          ),
         ),
       ),
     );

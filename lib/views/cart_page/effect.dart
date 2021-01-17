@@ -125,7 +125,7 @@ String processCartItemForOrder(CartItem item) {
 
   var result =
       '{ store_line_item_id: "${item.product.id}", sku: "$sku", quantity: ${item.count}, properties: $properties }';
-  printWrapped('processCartItemForOrder: $result');
+  // printWrapped('processCartItemForOrder: $result');
 
   return result;
 }
@@ -147,8 +147,8 @@ void _onProceedToCheckout(Action action, Context<CartPageState> ctx) async {
 
   productsIdsJson = "[${cart.map((item) => '"${item.product.id}"').join(',')}]";
 
-  printWrapped('orderDetailsJson: $orderDetailsJson');
-  printWrapped('productsIdsJson: $productsIdsJson');
+  // printWrapped('orderDetailsJson: $orderDetailsJson');
+  // printWrapped('productsIdsJson: $productsIdsJson');
 
   var result = await BaseGraphQLClient.instance
       .createOrder(orderDetailsJson, totalPrice, productsIdsJson);
@@ -156,7 +156,7 @@ void _onProceedToCheckout(Action action, Context<CartPageState> ctx) async {
     printWrapped('Exception: ${result.exception}');
   }
 
-  return;
+  // return;
 
   GlobalStore.store.dispatch(GlobalActionCreator.setShoppingCart(
       List<CartItem>.empty(growable: true)));

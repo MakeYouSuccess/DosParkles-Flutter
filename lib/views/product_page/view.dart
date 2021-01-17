@@ -186,229 +186,238 @@ class _MainBody extends StatelessWidget {
           },
           child: Container(
             color: HexColor('#50DDE1'),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: <Widget>[
-                SizedBox(
-                  height: 30,
-                ),
-                new Swiper(
-                  itemBuilder: (BuildContext context, int index) {
-                    return new Image.network(
-                      selectedProduct.mediaUrls[index],
-                      fit: BoxFit.fill,
-                    );
-                  },
-                  itemCount: selectedProduct.mediaUrls.length,
-                  itemWidth: Adapt.screenW() * 0.6,
-                  itemHeight: Adapt.screenW() * 0.6,
-                  layout: SwiperLayout.STACK,
-                  pagination: new SwiperPagination(
-                      margin:
-                          new EdgeInsets.only(top: Adapt.screenW() * 0.6 + 20),
-                      builder: new DotSwiperPaginationBuilder(
-                          color: Colors.grey,
-                          activeColor: HexColor('#3D9FB0'))),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Center(
-                    child: Text(
-                  selectedProduct.name,
-                  style: TextStyle(color: Colors.white, fontSize: 35),
-                )),
-                Padding(
-                  padding: const EdgeInsets.all(10.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        '\$${selectedProduct.price}',
-                        style: TextStyle(color: Colors.white, fontSize: 35),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(maxHeight: Adapt.screenH()),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(
+                      height: 30,
+                    ),
+                    new Swiper(
+                      itemBuilder: (BuildContext context, int index) {
+                        return new Image.network(
+                          selectedProduct.mediaUrls[index],
+                          fit: BoxFit.fill,
+                        );
+                      },
+                      itemCount: selectedProduct.mediaUrls.length,
+                      itemWidth: Adapt.screenW() * 0.6,
+                      itemHeight: Adapt.screenW() * 0.6,
+                      layout: SwiperLayout.STACK,
+                      pagination: new SwiperPagination(
+                          margin: new EdgeInsets.only(
+                              top: Adapt.screenW() * 0.6 + 20),
+                          builder: new DotSwiperPaginationBuilder(
+                              color: Colors.grey,
+                              activeColor: HexColor('#3D9FB0'))),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Center(
+                        child: Text(
+                      selectedProduct.name,
+                      style: TextStyle(color: Colors.white, fontSize: 35),
+                    )),
+                    Padding(
+                      padding: const EdgeInsets.all(10.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            '\$${selectedProduct.price}',
+                            style: TextStyle(color: Colors.white, fontSize: 35),
+                          ),
+                          selectedProduct.showOldPrice
+                              ? Padding(
+                                  padding: const EdgeInsets.only(left: 15.0),
+                                  child: Text(
+                                    '\$${selectedProduct.oldPrice}',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 25,
+                                        fontStyle: FontStyle.italic,
+                                        decoration: TextDecoration.lineThrough,
+                                        shadows: <Shadow>[
+                                          Shadow(
+                                              offset: Offset(1, 1),
+                                              blurRadius: 0,
+                                              color: Colors.black),
+                                          Shadow(
+                                              offset: Offset(-1, -1),
+                                              blurRadius: 0,
+                                              color: Colors.black),
+                                          Shadow(
+                                              offset: Offset(1, -1),
+                                              blurRadius: 0,
+                                              color: Colors.black),
+                                          Shadow(
+                                              offset: Offset(-1, 1),
+                                              blurRadius: 0,
+                                              color: Colors.black),
+                                        ]),
+                                  ),
+                                )
+                              : Container()
+                        ],
                       ),
-                      selectedProduct.showOldPrice
-                          ? Padding(
-                              padding: const EdgeInsets.only(left: 15.0),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Center(
+                        child: Text(
+                      'Quantity',
+                      style: TextStyle(color: Colors.white, fontSize: 18),
+                    )),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    TouchSpin(
+                        value: _productQuantity,
+                        onChanged: (val) {
+                          print('TouchSpin val: $val');
+                          // productQuantity = val.toInt();
+                          dispatch(ProductPageActionCreator.onSetProductCount(
+                              val.toInt()));
+                        },
+                        min: 1,
+                        max: 100,
+                        step: 1,
+                        iconSize: 20.0,
+                        subtractIcon: Icon(Icons.remove),
+                        addIcon: Icon(Icons.add),
+                        iconPadding: EdgeInsets.all(0),
+                        textStyle: TextStyle(fontSize: 18),
+                        iconActiveColor: Colors.white,
+                        iconDisabledColor: Colors.grey,
+                        displayFormat: new NumberFormat("###")),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    FlatButton(
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(25.0),
+                          side: BorderSide(color: Colors.white)),
+                      color: Colors.transparent,
+                      textColor: Colors.white,
+                      padding: EdgeInsets.only(
+                          top: 12.0, bottom: 12.0, left: 50, right: 50),
+                      onPressed: () {
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return StatefulBuilder(
+                                builder: (context, setState) {
+                                  return _ProductCustomization(
+                                      dispatch: dispatch,
+                                      selectedProduct: selectedProduct,
+                                      productQuantity: productQuantity,
+                                      engraveInputs: engraveInputs,
+                                      optionalMaterialSelected:
+                                          optionalMaterialSelected);
+                                },
+                              );
+                            });
+                      },
+                      child: Text(
+                        '\$${selectedProduct.price * productQuantity} - Add to Cart'
+                            .toUpperCase(),
+                        style: TextStyle(
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Spacer(),
+                        Column(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 46,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage("images/usamade.png"),
+                                    fit: BoxFit.contain),
+                              ),
+                            ),
+                            Container(
+                              height: 60,
                               child: Text(
-                                '\$${selectedProduct.oldPrice}',
+                                'U.S.A made',
                                 style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 25,
-                                    fontStyle: FontStyle.italic,
-                                    decoration: TextDecoration.lineThrough,
-                                    shadows: <Shadow>[
-                                      Shadow(
-                                          offset: Offset(1, 1),
-                                          blurRadius: 0,
-                                          color: Colors.black),
-                                      Shadow(
-                                          offset: Offset(-1, -1),
-                                          blurRadius: 0,
-                                          color: Colors.black),
-                                      Shadow(
-                                          offset: Offset(1, -1),
-                                          blurRadius: 0,
-                                          color: Colors.black),
-                                      Shadow(
-                                          offset: Offset(-1, 1),
-                                          blurRadius: 0,
-                                          color: Colors.black),
-                                    ]),
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 46,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image:
+                                        AssetImage("images/shippingfast.png"),
+                                    fit: BoxFit.contain),
+                              ),
+                            ),
+                            Container(
+                              height: 60,
+                              child: Text(
+                                'Shipping Fast',
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
+                              ),
+                            ),
+                          ],
+                        ),
+                        Spacer(),
+                        Column(
+                          children: [
+                            Container(
+                              width: 48,
+                              height: 46,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                    image: AssetImage("images/guranteed.png"),
+                                    fit: BoxFit.contain),
+                              ),
+                            ),
+                            Container(
+                              height: 60,
+                              child: Text(
+                                'Quality\nGuranteed',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    color: Colors.white, fontSize: 16),
                               ),
                             )
-                          : Container()
-                    ],
-                  ),
-                ),
-                SizedBox(
-                  height: 5,
-                ),
-                Center(
-                    child: Text(
-                  'Quantity',
-                  style: TextStyle(color: Colors.white, fontSize: 18),
-                )),
-                SizedBox(
-                  height: 10,
-                ),
-                TouchSpin(
-                    value: _productQuantity,
-                    onChanged: (val) {
-                      print('TouchSpin val: $val');
-                      // productQuantity = val.toInt();
-                      dispatch(ProductPageActionCreator.onSetProductCount(
-                          val.toInt()));
-                    },
-                    min: 1,
-                    max: 100,
-                    step: 1,
-                    iconSize: 20.0,
-                    subtractIcon: Icon(Icons.remove),
-                    addIcon: Icon(Icons.add),
-                    iconPadding: EdgeInsets.all(0),
-                    textStyle: TextStyle(fontSize: 18),
-                    iconActiveColor: Colors.white,
-                    iconDisabledColor: Colors.grey,
-                    displayFormat: new NumberFormat("###")),
-                SizedBox(
-                  height: 20,
-                ),
-                FlatButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(25.0),
-                      side: BorderSide(color: Colors.white)),
-                  color: Colors.transparent,
-                  textColor: Colors.white,
-                  padding: EdgeInsets.only(
-                      top: 12.0, bottom: 12.0, left: 50, right: 50),
-                  onPressed: () {
-                    showDialog(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return _ProductCustomization(
-                                  dispatch: dispatch,
-                                  selectedProduct: selectedProduct,
-                                  productQuantity: productQuantity,
-                                  engraveInputs: engraveInputs,
-                                  optionalMaterialSelected:
-                                      optionalMaterialSelected);
-                            },
-                          );
-                        });
-                  },
-                  child: Text(
-                    '\$${selectedProduct.price * productQuantity} - Add to Cart'
-                        .toUpperCase(),
-                    style: TextStyle(
-                      fontSize: 16.0,
-                    ),
-                  ),
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Spacer(),
-                    Column(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("images/usamade.png"),
-                                fit: BoxFit.contain),
-                          ),
+                          ],
                         ),
-                        Container(
-                          height: 60,
-                          child: Text(
-                            'U.S.A made',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
+                        Spacer(),
                       ],
                     ),
                     Spacer(),
-                    Column(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("images/shippingfast.png"),
-                                fit: BoxFit.contain),
-                          ),
-                        ),
-                        Container(
-                          height: 60,
-                          child: Text(
-                            'Shipping Fast',
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        ),
-                      ],
+                    Center(
+                        child: Text(
+                      'Swipe down to go to the product page',
+                      style: TextStyle(color: Colors.white, fontSize: 20),
+                    )),
+                    SizedBox(
+                      height: 30,
                     ),
-                    Spacer(),
-                    Column(
-                      children: [
-                        Container(
-                          width: 48,
-                          height: 46,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                                image: AssetImage("images/guranteed.png"),
-                                fit: BoxFit.contain),
-                          ),
-                        ),
-                        Container(
-                          height: 60,
-                          child: Text(
-                            'Quality\nGuranteed',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(color: Colors.white, fontSize: 16),
-                          ),
-                        )
-                      ],
-                    ),
-                    Spacer(),
                   ],
                 ),
-                Spacer(),
-                Center(
-                    child: Text(
-                  'Swipe down to go to the product page',
-                  style: TextStyle(color: Colors.white, fontSize: 20),
-                )),
-                SizedBox(
-                  height: 30,
-                ),
-              ],
+              ),
             ),
           ),
         ),
