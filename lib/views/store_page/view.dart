@@ -430,7 +430,7 @@ class LeftPanel extends StatelessWidget {
           ),
           Center(
               child: Text(
-            'Swipe right for Shop Now',
+            'Swipe left for Shop Now',
             style: TextStyle(color: Colors.white, fontSize: 25),
           )),
         ],
