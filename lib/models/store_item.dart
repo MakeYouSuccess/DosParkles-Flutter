@@ -45,7 +45,7 @@ class StoreItem {
       List<ProductItem> _products = List.empty(growable: true);
 
       for (var i = 0; i < jsonRes['products'].length; i++) {
-        printWrapped('product: ${jsonRes['products'][i].toString()}');
+        // printWrapped('product: ${jsonRes['products'][i].toString()}');
         if (jsonRes['products'][i]['isActive'] == null ||
             jsonRes['products'][i]['isActive'] == false) continue;
         ProductItem _productItem =

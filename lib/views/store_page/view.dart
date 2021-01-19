@@ -107,7 +107,7 @@ class _ListView extends StatelessWidget {
         curve: Curves.ease,
       ),
     );
-    printWrapped('store.products: ${store.products}');
+    // printWrapped('store.products: ${store.products}');
     return Center(
       child: SlideTransition(
         position:

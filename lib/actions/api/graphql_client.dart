@@ -164,7 +164,7 @@ class BaseGraphQLClient {
       }
     }
     ''';
-    printWrapped('Debug _mutation: $_mutation');
+    // printWrapped('Debug _mutation: $_mutation');
     return _service.query(_mutation);
   }
 

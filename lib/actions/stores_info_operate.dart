@@ -12,16 +12,16 @@ class StoresInfoOperate {
 
     List<StoreItem> storesList = List.empty(growable: true);
 
-    printWrapped('stores data raw: ${storesRequest.data['stores']}');
+    // printWrapped('stores data raw: ${storesRequest.data['stores']}');
     
     for (var i = 0; i < storesRequest.data['stores'].length; i++) {
-      printWrapped('store: ${storesRequest.data['stores'][i]}');
+      // printWrapped('store: ${storesRequest.data['stores'][i]}');
       StoreItem _store =
           ModelFactory.generate<StoreItem>(storesRequest.data['stores'][i]);
       storesList.add(_store);
     }
 
-    printWrapped('storesList: ${storesList.toString()}');
+    // printWrapped('storesList: ${storesList.toString()}');
 
     GlobalStore.store.dispatch(GlobalActionCreator.setStoresList(storesList));
   }
