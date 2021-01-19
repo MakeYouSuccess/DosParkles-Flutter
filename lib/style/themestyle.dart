@@ -10,7 +10,7 @@ class ThemeStyle {
     primaryColorLight: const Color(0xFFF5F5F5),
     primaryColorDark: const Color(0xFFEEEEEE),
   );
-  
+
   static final darkTheme = ThemeData.dark().copyWith(
       tabBarTheme: TabBarTheme(labelColor: const Color(0xFFFFFFFF)),
       backgroundColor: HexColor('#50DDE1'),
@@ -23,9 +23,10 @@ class ThemeStyle {
   static ThemeData theme;
   static ThemeData getTheme(BuildContext context) {
     _mediaQuery = MediaQuery.of(context);
-    theme = _mediaQuery.platformBrightness == Brightness.light
-        ? lightTheme
-        : darkTheme;
+    theme = lightTheme;
+    // _mediaQuery.platformBrightness == Brightness.light
+    //     ? lightTheme
+    //     : darkTheme;
     return theme;
   }
 }

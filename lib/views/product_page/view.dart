@@ -888,6 +888,9 @@ class _ProductCustomizationState extends State<_ProductCustomization> {
                   style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.bold),
                 ),
               ),
+               SizedBox(
+                height: 20,
+              ),
               //
             ],
           ),
