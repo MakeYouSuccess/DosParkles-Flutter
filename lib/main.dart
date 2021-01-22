@@ -96,8 +96,8 @@ class _AppState extends State<App> {
   final FirebaseAnalytics analytics = FirebaseAnalytics();
 
   Future _init() async {
-    if (Platform.isAndroid)
-      await PermissionHandler().requestPermissions([PermissionGroup.storage]);
+    // if (Platform.isAndroid)
+    //   await PermissionHandler().requestPermissions([PermissionGroup.storage]);
 
     // await AppConfig.instance.init(context);
   }

@@ -12,17 +12,19 @@ class StoresInfoOperate {
 
     List<StoreItem> storesList = List.empty(growable: true);
 
-    // printWrapped('stores data raw: ${storesRequest.data['stores']}');
-    
-    for (var i = 0; i < storesRequest.data['stores'].length; i++) {
-      // printWrapped('store: ${storesRequest.data['stores'][i]}');
-      StoreItem _store =
-          ModelFactory.generate<StoreItem>(storesRequest.data['stores'][i]);
-      storesList.add(_store);
+    printWrapped('stores data raw: $storesRequest');
+
+    if (storesRequest.data['stores'] != null) {
+      for (var i = 0; i < storesRequest.data['stores'].length; i++) {
+        // printWrapped('store: ${storesRequest.data['stores'][i]}');
+        StoreItem _store =
+            ModelFactory.generate<StoreItem>(storesRequest.data['stores'][i]);
+        storesList.add(_store);
+      }
+
+      // printWrapped('storesList: ${storesList.toString()}');
+
+      GlobalStore.store.dispatch(GlobalActionCreator.setStoresList(storesList));
     }
-
-    // printWrapped('storesList: ${storesList.toString()}');
-
-    GlobalStore.store.dispatch(GlobalActionCreator.setStoresList(storesList));
   }
 }

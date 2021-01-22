@@ -40,6 +40,5 @@ post_install do |installer|
   end
 end
 
-pod 'Firebase/Analytics'
-pod 'Firebase/Messaging'
-pod 'Firebase/MLVisionTextModel'
+pod 'Firebase/Analytics', '>= 0'
+pod 'Firebase/Messaging', '>= 0'
