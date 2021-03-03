@@ -33,8 +33,8 @@ class UserInfoOperate {
 
     final savedToken = _preferences.getString('jwt') ?? '';
 
-    if (savedToken.isNotEmpty) {
-      whenLogin(savedToken);
-    }
+    // if (savedToken.isNotEmpty) {
+    //   whenLogin(savedToken);
+    // }
   }
 }

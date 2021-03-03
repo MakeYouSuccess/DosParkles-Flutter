@@ -23,6 +23,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   intl:
   fish_redux: ^0.3.3
   common_utils: ^1.2.1
@@ -41,7 +43,6 @@ dependencies:
   lottie: ^0.7.0+1
   font_awesome_flutter: ^8.5.0
   cached_network_image: ^2.0.0
-  flick_video_player: ^0.1.1
   package_info: ^0.4.0+16
   dart_strapi: ^0.0.3
   table_calendar: ^2.3.0
@@ -54,14 +55,22 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.0
+  video_player:
+    git:
+      url: https://github.com/sanekyy/plugins.git
+      ref: caching
+      path: packages/video_player/video_player   
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  integration_test:
-    sdk: flutter
-  flutter_localizations:
-    sdk: flutter
+
+dependency_overrides:
+  video_player:
+    git:
+      url: https://github.com/sanekyy/plugins.git
+      ref: caching
+      path: packages/video_player/video_player
     
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

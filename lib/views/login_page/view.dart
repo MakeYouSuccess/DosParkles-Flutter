@@ -13,7 +13,7 @@ import 'state.dart';
 Widget buildView(
     LoginPageState state, Dispatch dispatch, ViewService viewService) {
   return Scaffold(
-    resizeToAvoidBottomPadding: false,
+    
     body: Stack(
       children: <Widget>[
         _BackGround(controller: state.animationController),

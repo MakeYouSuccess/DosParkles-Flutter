@@ -22,7 +22,7 @@ Widget buildView(
     CartPageState state, Dispatch dispatch, ViewService viewService) {
   Adapt.initContext(viewService.context);
   return Scaffold(
-    resizeToAvoidBottomPadding: false,
+    
     body: Container(
       alignment: Alignment.center,
       width: double.infinity,

@@ -16,7 +16,7 @@ Widget buildView(
     StoreSelectionPageState state, Dispatch dispatch, ViewService viewService) {
   Adapt.initContext(viewService.context);
   return Scaffold(
-    resizeToAvoidBottomPadding: false,
+    
     body: Stack(
       children: <Widget>[
         _BackGround(controller: state.animationController),

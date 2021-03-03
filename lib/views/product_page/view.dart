@@ -25,7 +25,7 @@ Widget buildView(
   Adapt.initContext(viewService.context);
   // print('state.optionalMaterialSelected: $r{state.optionalMaterialSelected}');
   return Scaffold(
-    resizeToAvoidBottomPadding: false,
+    
     body: Container(
       alignment: Alignment.center,
       width: double.infinity,

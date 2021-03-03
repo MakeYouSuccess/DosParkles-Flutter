@@ -1,7 +1,6 @@
 import 'package:com.floridainc.dosparkles/models/models.dart';
 import 'package:com.floridainc.dosparkles/utils/general.dart';
 import 'package:fish_redux/fish_redux.dart';
-import 'package:flick_video_player/flick_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:com.floridainc.dosparkles/actions/adapt.dart';
@@ -279,8 +278,9 @@ class _VideoPlayerItemState extends State<VideoPlayerItem> {
   void initState() {
     // TODO: implement initState
     super.initState();
+    // printWrapped(widget.videoUrl);
 
-    _videoController = VideoPlayerController.network(widget.videoUrl)
+    _videoController = VideoPlayerController.network(widget.videoUrl, useCache: true)
       ..initialize().then((value) {
         _videoController.setLooping(true);
         _videoController.play();
